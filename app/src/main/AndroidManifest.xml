@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.illinois.ugl.minrvaestimote">
+    package="edu.illinois.ugl.minrvaestimote"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-sdk tools:overrideLibrary="com.estimote.sdk"/>
 
     <application
         android:allowBackup="true"

@@ -2,11 +2,13 @@ package edu.illinois.ugl.minrvaestimote;
 
 import com.estimote.sdk.Utils;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -27,6 +29,13 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // http://developer.android.com/guide/topics/connectivity/bluetooth-le.html
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, "BLE not supported on your device.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        else Toast.makeText(this, "BLE is supported on your device.", Toast.LENGTH_SHORT).show();
 
         final DisplayCanvas dc = (DisplayCanvas) findViewById(R.id.displayCanvas);
         final double[][] beaconCoords = { {0, 0}, {1, 3.4}, {2.5, 0} }; // TODO replace later
