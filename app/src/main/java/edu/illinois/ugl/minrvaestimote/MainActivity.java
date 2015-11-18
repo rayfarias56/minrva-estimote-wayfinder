@@ -37,32 +37,36 @@ public class MainActivity extends ActionBarActivity {
         }
         else Toast.makeText(this, "BLE is supported on your device.", Toast.LENGTH_SHORT).show();
 
-        final DisplayCanvas dc = (DisplayCanvas) findViewById(R.id.displayCanvas);
-        final double[][] beaconCoords = { {0, 0}, {1, 3.4}, {2.5, 0} }; // TODO replace later
+        final LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
+        final BeaconDict beaconDict = new BeaconDict();
 
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
             @Override
             public void onBeaconsDiscovered(Region region, List<Beacon> list) {
                 Log.d("Minrva Wayfinder", "NumBeacons was " + list.size());
+                for (int i = 0; i < list.size(); i++) {
+                    Log.d("Minrva Wayfinder", "Beacon " + i + ": " + list.get(i).toString());
+                }
+
                 if (list.size() >= 3) {
+                    double[][] beaconCoords = beaconDict.getCoords(list);
+
                     double[] distances = new double[list.size()];
-                    for (int i = 0; i < list.size(); i++) {
+                    for (int i = 0; i < list.size(); i++)
                         distances[i] = Utils.computeAccuracy(list.get(i));
-                    }
+
                     // TODO new TF can throw exceptions, maybe try to catch them
                     TrilaterationFunction tf = new TrilaterationFunction(beaconCoords, distances);
                     NonLinearLeastSquaresSolver solver =
                             new NonLinearLeastSquaresSolver(tf, new LevenbergMarquardtOptimizer());
                     Optimum optimum = solver.solve();
-                    dc.updateLocation(optimum.getPoint().toArray());
+                    map.updateLocations(optimum.getPoint().toArray(), beaconCoords);
                 }
             }
         });
 
-        region = new Region("ranged region",
-                UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"), null, null);
-        // TODO in the final product, set all library beacons to a specific UUID and change this ^
+        region = new Region("ranged region", BeaconDict.MINRVA_UUID, null, null);
     }
 
     @Override

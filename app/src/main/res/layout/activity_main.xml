@@ -4,11 +4,43 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#e53f3f">
 
-    <edu.illinois.ugl.minrvaestimote.DisplayCanvas
-    android:id="@+id/displayCanvas"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:textColor="#FFFFFF" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <edu.illinois.ugl.minrvaestimote.LibraryMap
+        android:id="@+id/displayCanvas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:src="@drawable/ugl_map"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+        android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 </LinearLayout>
