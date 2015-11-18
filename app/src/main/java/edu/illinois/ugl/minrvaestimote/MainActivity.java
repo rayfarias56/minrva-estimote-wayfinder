@@ -49,8 +49,10 @@ public class MainActivity extends ActionBarActivity {
                     Log.d("Minrva Wayfinder", "Beacon " + i + ": " + list.get(i).toString());
                 }
 
+                double[][] beaconCoords = beaconDict.getCoords(list);
+                double[] userCoords = null;
+
                 if (list.size() >= 3) {
-                    double[][] beaconCoords = beaconDict.getCoords(list);
 
                     double[] distances = new double[list.size()];
                     for (int i = 0; i < list.size(); i++)
@@ -61,8 +63,11 @@ public class MainActivity extends ActionBarActivity {
                     NonLinearLeastSquaresSolver solver =
                             new NonLinearLeastSquaresSolver(tf, new LevenbergMarquardtOptimizer());
                     Optimum optimum = solver.solve();
-                    map.updateLocations(optimum.getPoint().toArray(), beaconCoords);
+                    userCoords = optimum.getPoint().toArray();
                 }
+
+                map.updateLocations(userCoords, beaconCoords);
+
             }
         });
 

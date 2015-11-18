@@ -87,7 +87,8 @@ public class LibraryMap extends ImageView {
     }
 
     public void updateLocations(double[] userCoords, double[][] beaconsCoords) {
-        this.userCoords = userCoords;
+        if (userCoords != null)
+            this.userCoords = userCoords;
         this.beaconsCoords = beaconsCoords;
         invalidate();
     }
