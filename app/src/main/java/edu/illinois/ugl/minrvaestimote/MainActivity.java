@@ -2,6 +2,9 @@ package edu.illinois.ugl.minrvaestimote;
 
 import com.estimote.sdk.Utils;
 
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -36,6 +39,36 @@ public class MainActivity extends ActionBarActivity {
             finish();
         }
         else Toast.makeText(this, "BLE is supported on your device.", Toast.LENGTH_SHORT).show();
+
+        final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter == null) {
+            Log.d("Minrva Wayfinder", "Bluetooth not available");
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_no_bluetooth)
+                .setMessage(R.string.dialog_message_no_bluetooth)
+                .create().show();
+        }
+        else if (!adapter.isEnabled()) {
+            Log.d("Minrva Wayfinder", "Bluetooth not enabled.");
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_bluetooth_disabled)
+                .setMessage(R.string.dialog_message_bluetooth_disabled)
+                .setNegativeButton(R.string.dialog_button_bluetooth_disabled_neg,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    })
+                .setPositiveButton(R.string.dialog_button_bluetooth_disabled_pos,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // TODO Turn Bluetooth off when the app closes?
+                            adapter.enable();
+                            dialog.cancel();
+                        }
+                    })
+                .create().show();
+        }
 
         final LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
         final BeaconDict beaconDict = new BeaconDict();

@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Minrva Estimote</string>
     <string name="action_settings">Settings</string>
+
+    <string name="dialog_title_no_bluetooth">Bluetooth Not Available</string>
+    <string name="dialog_message_no_bluetooth">Your device does not support Bluetooth.
+        Your location on the map will not be shown.</string>
+
+    <string name="dialog_title_bluetooth_disabled">Bluetooth Not Enabled</string>
+    <string name="dialog_message_bluetooth_disabled">Enable Bluetooth to see your location
+        on the map?</string>
+    <string name="dialog_button_bluetooth_disabled_pos">OK</string>
+    <string name="dialog_button_bluetooth_disabled_neg">Cancel</string>
+
 </resources>

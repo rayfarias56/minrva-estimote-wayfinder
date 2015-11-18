@@ -28,7 +28,8 @@ public class LibraryMap extends ImageView {
     private static final float[] MAP_DIMS = new float[]{18.0f, 18.0f};
 
     // TODO Don't display until trilateration performed?
-    private double[] userCoords = new double[]{0.0, 0.0};
+    private double[] UNK_COORDS = new double[0];
+    private double[] userCoords = UNK_COORDS;
 
     // Coordinates of the discovered beacons in meters
     private double[][] beaconsCoords = new double[0][];
@@ -68,10 +69,12 @@ public class LibraryMap extends ImageView {
     {
         super.onDraw(canvas);
 
-        float[] userMapCoords = translateCoords(this.userCoords);
-        Drawable userDot = userDots[0];
-        userDot.setBounds(getDotBounds(userDot, userMapCoords));
-        userDot.draw(canvas);
+        if (userCoords != UNK_COORDS) {
+            float[] userMapCoords = translateCoords(this.userCoords);
+            Drawable userDot = userDots[0];
+            userDot.setBounds(getDotBounds(userDot, userMapCoords));
+            userDot.draw(canvas);
+        }
 
         if (DRAW_BEACONS)
             drawBeacons(canvas);
