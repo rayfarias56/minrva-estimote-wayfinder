@@ -22,6 +22,11 @@ public class BeaconDict {
         this.beaconCoords = new HashMap<Integer, HashMap<Integer, double[]>>();
         addBeacon(55809, 65302, new double[]{5.0, 2.0});
         addBeacon(30816, 41832, new double[]{2.0, 5.0});
+
+        //beacons - yier
+        //addBeacon(63145, 5680, new double[]{1.0, 1.0});
+        //addBeacon(7702, 3760, new double[]{2.0, 2.0});
+        //addBeacon(60183, 20478, new double[]{3.0, 3.0});
     }
 
     private void addBeacon(int major, int minor, double[] coords) {
