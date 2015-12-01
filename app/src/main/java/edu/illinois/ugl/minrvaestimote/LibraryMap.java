@@ -25,7 +25,7 @@ public class LibraryMap extends ImageView {
     public double[] ORIGIN = {5.0, 5.0};
 
     // Real-world dimensions of the map in meters
-    private static final float[] MAP_DIMS = new float[]{18.0f, 18.0f};
+    private static final float[] MAP_DIMS = new float[]{56.244f, 55.9f};
 
     // TODO Don't display until trilateration performed?
     private double[] UNK_COORDS = new double[0];

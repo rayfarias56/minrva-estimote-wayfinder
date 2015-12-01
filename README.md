@@ -1,7 +1,4 @@
-# Testing pushing to GitHub.
+# A prototype app for adding Estimote beacon support to the Minrva app.
 
-Testing -blaisde2
-
-Testing -rfarias2
-
-* Could start app on phone, but not on emulator.
+(http://minrvaproject.org/)
+(https://seniorprojects.cs.illinois.edu/confluence/display/ES/Estimote+Home)
