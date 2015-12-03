@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.Beacon;
@@ -21,17 +23,29 @@ import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer.Optim
 import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 
 import java.util.List;
-import java.util.UUID;
 
 public class MainActivity extends ActionBarActivity {
 
     private BeaconManager beaconManager;
     private Region region;
+    private String bibId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                bibId = null;
+            } else {
+                bibId = extras.getString("bibId");
+            }
+        } else {
+            bibId = (String) savedInstanceState.getSerializable("bibId");
+        }
         setContentView(R.layout.activity_main);
+
+        getItemInfo();
 
         // http://developer.android.com/guide/topics/connectivity/bluetooth-le.html
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -148,4 +162,12 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void getItemInfo() {
+        // call minrva api to get item info, update the view
+        final TextView itemTitleTV = (TextView) findViewById(R.id.itemTitle);
+        final ImageView itemThumbnailIV = (ImageView) findViewById(R.id.itemThumbnail);
+        new DownloadItemAsyncTask(itemTitleTV, itemThumbnailIV).execute(bibId);
+    }
+
 }
