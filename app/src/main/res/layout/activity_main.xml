@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -7,48 +7,98 @@
     tools:context=".MainActivity"
     android:background="#a5803d">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <TextView
+        android:id="@+id/titleBanner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="You are looking for:"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/large_font_size"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/infoPanel"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="180dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_below="@+id/titleBanner">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/itemThumbnail"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="fill_parent"/>
 
         <TextView
             android:id="@+id/itemTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:textSize="@dimen/extra_large_font_size"/>
+            android:textSize="@dimen/extra_large_font_size"
+            android:layout_toRightOf="@+id/itemThumbnail"/>
 
-        <View
+        <TextView
+            android:id="@+id/itemCallNumber"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/medium_font_size"
+            android:layout_toRightOf="@+id/itemThumbnail"
+            android:layout_below="@+id/itemTitle"/>
+
+        <TextView
+            android:id="@+id/itemShelfNumber"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/medium_font_size"
+            android:layout_toRightOf="@+id/itemThumbnail"
+            android:layout_below="@+id/itemCallNumber"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/infoPanel">
+
+        <Button
+            android:id="@+id/searchHistoryBtn"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            style="@style/Base.Widget.AppCompat.ActionButton"
+            android:text="Recently searched"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/large_font_size" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <Button
+            android:id="@+id/itemNearbyBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            style="@style/Base.Widget.AppCompat.ActionButton"
+            android:text="Popular items near me"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/large_font_size"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/buttonPanel">
 
         <View
             android:layout_width="0dp"
@@ -56,13 +106,13 @@
             android:layout_weight="1" />
 
         <edu.illinois.ugl.minrvaestimote.LibraryMap
-        android:id="@+id/displayCanvas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+            android:id="@+id/displayCanvas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ugl_map"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-        android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF" />
 
         <View
             android:layout_width="0dp"
@@ -71,9 +121,4 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-</LinearLayout>
+</RelativeLayout>

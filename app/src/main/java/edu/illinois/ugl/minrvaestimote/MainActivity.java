@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
@@ -164,10 +166,20 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void getItemInfo() {
+        // set imageLoader config here
+        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(getApplicationContext());
+        ImageLoader.getInstance().init(config.build());
+
         // call minrva api to get item info, update the view
         final TextView itemTitleTV = (TextView) findViewById(R.id.itemTitle);
         final ImageView itemThumbnailIV = (ImageView) findViewById(R.id.itemThumbnail);
-        new DownloadItemAsyncTask(itemTitleTV, itemThumbnailIV).execute(bibId);
+        final TextView itemCallNumberTV = (TextView) findViewById(R.id.itemCallNumber);
+        new DownloadItemAsyncTask(itemTitleTV, itemThumbnailIV, itemCallNumberTV).execute(bibId);
     }
 
+    private void getSearchHistoryReady() {
+        //TODO add popup window for search history
+//        final Button historyBtn = (Button) findViewById(R.id.searchHistoryBtn);
+//        final PopupMenu popupMenu = new PopupMenu(this, historyBtn);
+    }
 }
