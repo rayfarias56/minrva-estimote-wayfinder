@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/small_font_size">
+
+    <ImageView
+        android:id="@+id/recsThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5px" />
+
+    <TextView
+        android:id="@+id/recsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/recsThumbnail"
+        android:textColor="#ff0000"
+        android:textSize="@dimen/large_font_size" />
+
+    <TextView
+        android:id="@+id/recsAuthor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recsTitle"
+        android:layout_toRightOf="@+id/recsThumbnail"
+        android:textColor="#fcf8e5"
+        android:textSize="@dimen/medium_font_size" />
+
+    <TextView
+        android:id="@+id/recsShelfNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recsAuthor"
+        android:layout_toRightOf="@+id/recsThumbnail"
+        android:textColor="#fcf8e5"
+        android:textSize="@dimen/medium_font_size" />
+
+</RelativeLayout>
+
+

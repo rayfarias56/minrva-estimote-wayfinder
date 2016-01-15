@@ -5,13 +5,22 @@ import com.estimote.sdk.Utils;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +33,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -48,6 +60,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         getItemInfo();
+        getSearchHistoryReady();
+        getRecsReady();
 
         // http://developer.android.com/guide/topics/connectivity/bluetooth-le.html
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -178,8 +192,72 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void getSearchHistoryReady() {
-        //TODO add popup window for search history
-//        final Button historyBtn = (Button) findViewById(R.id.searchHistoryBtn);
-//        final PopupMenu popupMenu = new PopupMenu(this, historyBtn);
+        Button searchHistoryBtn = (Button) findViewById(R.id.searchHistoryBtn);
+
+        searchHistoryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initHistoryPopWindow();
+            }
+        });
     }
+
+    private void initHistoryPopWindow() {
+        View contentView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.history_list_popup, null);
+        PopupWindow popupWindow = new PopupWindow(findViewById(R.id.mainLayout), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow.setContentView(contentView);
+        //TODO dim the background activity
+
+        //load contents into the list
+        ListView listView = (ListView) contentView.findViewById(R.id.historyItemList);
+        SimpleAdapter adapter = new SimpleAdapter(this,getHistoryData(),R.layout.history_list_item,
+                new String[]{"historyTitle","historyInfo","historyThumbnail"},
+                new int[]{R.id.historyTitle,R.id.historyInfo,R.id.historyThumbnail});
+        if (adapter != null) {
+            listView.setAdapter(adapter);
+        }
+
+        popupWindow.showAtLocation(findViewById(R.id.mainLayout), Gravity.CENTER, 0, 0);
+    }
+
+    private List<Map<String, Object>> getHistoryData() {
+        //TODO get user search history data from local cache
+        List<Map<String, Object>> historyList = new ArrayList<>();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("historyTitle", "Book 1");
+        map.put("historyInfo", "uiuc undergraduate library 1");
+        map.put("historyThumbnail", R.drawable.test);
+        historyList.add(map);
+
+        map = new HashMap<>();
+        map.put("historyTitle", "Book 2");
+        map.put("historyInfo", "uiuc undergraduate library 2");
+        map.put("historyThumbnail", R.drawable.test);
+        historyList.add(map);
+
+        map = new HashMap<>();
+        map.put("historyTitle", "Book 3");
+        map.put("historyInfo", "uiuc undergraduate library 3");
+        map.put("historyThumbnail", R.drawable.test);
+        historyList.add(map);
+
+        return historyList;
+    }
+
+    private void getRecsReady() {
+        Button recsBtn = (Button) findViewById(R.id.itemRecsBtn);
+
+        recsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( !bibId.equals("") ) {
+                    Intent intent = new Intent(getApplicationContext(), RecsActivity.class);
+                    intent.putExtra("bibId", bibId);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
 }

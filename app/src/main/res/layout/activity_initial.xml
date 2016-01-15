@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".MainActivity"
-    android:background="#a5803d">
+    android:background="#a5803d"
+    android:orientation="vertical"
+    tools:context=".InitialActivity">
 
     <View
         android:layout_width="0dp"
@@ -13,9 +13,9 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <View
             android:layout_width="0dp"
@@ -26,9 +26,9 @@
             android:id="@+id/bibId"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:hint="Enter a Bib ID number"
             android:inputType="textNoSuggestions"
             android:textColor="#fcf8e5"
-            android:hint="Enter a Bib ID number"
             android:textSize="@dimen/extra_large_font_size" />
 
         <View
@@ -40,10 +40,10 @@
 
     <Button
         android:id="@+id/searchButton"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:text="Search"
         android:textSize="@dimen/large_font_size" />
 

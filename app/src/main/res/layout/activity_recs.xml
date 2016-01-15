@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#a5803d"
+    android:orientation="vertical"
+    tools:context=".RecsActivity">
+
+    <TextView
+        android:id="@+id/bookRecs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_font_size"
+        android:text="Related items:"
+        android:textSize="@dimen/extra_large_font_size" />
+
+    <ListView
+        android:id="@+id/bookRecsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bookRecs"></ListView>
+
+    <TextView
+        android:id="@+id/dbRecs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bookRecsList"
+        android:padding="@dimen/small_font_size"
+        android:text="Related databases:"
+        android:textSize="@dimen/extra_large_font_size" />
+
+    <ListView
+        android:id="@+id/dbRecsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dbRecs"></ListView>
+
+</RelativeLayout>
