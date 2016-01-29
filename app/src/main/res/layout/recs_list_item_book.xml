@@ -9,14 +9,14 @@
         android:id="@+id/recsThumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5px" />
+        android:layout_margin="10px" />
 
     <TextView
         android:id="@+id/recsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/recsThumbnail"
-        android:textColor="#ff0000"
+        android:textColor="#de0000"
         android:textSize="@dimen/large_font_size" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/recsTitle"
         android:layout_toRightOf="@+id/recsThumbnail"
-        android:textColor="#fcf8e5"
+        android:textColor="#A5803D"
         android:textSize="@dimen/medium_font_size" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/recsAuthor"
         android:layout_toRightOf="@+id/recsThumbnail"
-        android:textColor="#fcf8e5"
+        android:textColor="#A5803D"
         android:textSize="@dimen/medium_font_size" />
 
 </RelativeLayout>

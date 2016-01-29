@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import edu.illinois.ugl.minrvaestimote.Network.DownloadItemAsyncTask;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -213,15 +216,28 @@ public class MainActivity extends ActionBarActivity {
         SimpleAdapter adapter = new SimpleAdapter(this,getHistoryData(),R.layout.history_list_item,
                 new String[]{"historyTitle","historyInfo","historyThumbnail"},
                 new int[]{R.id.historyTitle,R.id.historyInfo,R.id.historyThumbnail});
+
         if (adapter != null) {
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    //TODO get the bibId from search history
+                    String historyBibId = "uiu_3359738";
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("bibId", historyBibId);
+                    startActivity(intent);
+                }
+            });
+
         }
 
         popupWindow.showAtLocation(findViewById(R.id.mainLayout), Gravity.CENTER, 0, 0);
     }
 
     private List<Map<String, Object>> getHistoryData() {
-        //TODO get user search history data from local cache
+        //TODO implement cache and load search history
         List<Map<String, Object>> historyList = new ArrayList<>();
 
         Map<String, Object> map = new HashMap<>();
@@ -251,13 +267,15 @@ public class MainActivity extends ActionBarActivity {
         recsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( !bibId.equals("") ) {
+                //TODO get the shelf number near user
+                String shelfNumber = "15";
+
+                if ( !shelfNumber.equals("") ) {
                     Intent intent = new Intent(getApplicationContext(), RecsActivity.class);
-                    intent.putExtra("bibId", bibId);
+                    intent.putExtra("shelfNumber", shelfNumber);
                     startActivity(intent);
                 }
             }
         });
     }
-
 }

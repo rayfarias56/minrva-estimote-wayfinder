@@ -5,16 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import edu.illinois.ugl.minrvaestimote.Network.DownloadRecsAsyncTask;
 
 public class RecsActivity extends AppCompatActivity {
 
-    private String bibId;
+    private String shelfNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,51 +18,20 @@ public class RecsActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                bibId = null;
+                shelfNumber = null;
             } else {
-                bibId = extras.getString("bibId");
+                shelfNumber = extras.getString("shelfNumber");
             }
         } else {
-            bibId = (String) savedInstanceState.getSerializable("bibId");
+            shelfNumber = (String) savedInstanceState.getSerializable("shelfNumber");
         }
         setContentView(R.layout.activity_recs);
 
-        //TODO change to async task, use api
-        loadListContent();
-    }
-
-    private void loadListContent() {
-        //load contents into the list
-        ListView listView = (ListView) this.findViewById(R.id.bookRecsList);
-        SimpleAdapter adapter = new SimpleAdapter(this,getRecsData(),R.layout.recs_list_item,
-                new String[]{"recsTitle","recsAuthor","recsThumbnail","recsShelfNumber"},
-                new int[]{R.id.recsTitle,R.id.recsAuthor,R.id.recsThumbnail,R.id.recsShelfNumber});
-        if (adapter != null) {
-            listView.setAdapter(adapter);
-        }
-
-        //TODO load database info
-    }
-
-    private List<Map<String, Object>> getRecsData() {
-        //temp test data
-        List<Map<String, Object>> historyList = new ArrayList<>();
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("recsTitle", "Item 1");
-        map.put("recsAuthor", "Name of the author");
-        map.put("recsThumbnail", R.drawable.test);
-        map.put("recsShelfNumber", "A11");
-        historyList.add(map);
-
-        map = new HashMap<>();
-        map.put("recsTitle", "Item 2");
-        map.put("recsAuthor", "Name of the author");
-        map.put("recsThumbnail", R.drawable.test);
-        map.put("recsShelfNumber", "A12");
-        historyList.add(map);
-
-        return historyList;
+        // load list contents and update the view
+        final ListView bookListView = (ListView) this.findViewById(R.id.bookRecsList);
+        final ListView ebookListView = (ListView) this.findViewById(R.id.ebookRecsList);
+        final ListView dbListView = (ListView) this.findViewById(R.id.dbRecsList);
+        new DownloadRecsAsyncTask(bookListView, ebookListView, dbListView, this).execute(shelfNumber);
     }
 
     @Override

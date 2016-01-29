@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#a5803d"
+    android:background="#fcf8e5"
     android:orientation="vertical"
     tools:context=".RecsActivity">
 
@@ -12,28 +12,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/small_font_size"
-        android:text="Related items:"
+        android:text="Related books:"
+        android:textColor="#A5803D"
         android:textSize="@dimen/extra_large_font_size" />
 
     <ListView
         android:id="@+id/bookRecsList"
         android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@+id/bookRecs"
+        android:layout_weight="1"></ListView>
+
+    <TextView
+        android:id="@+id/ebookRecs"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bookRecs"></ListView>
+        android:layout_below="@+id/bookRecsList"
+        android:padding="@dimen/small_font_size"
+        android:text="Related E-books:"
+        android:textColor="#A5803D"
+        android:textSize="@dimen/extra_large_font_size" />
+
+    <ListView
+        android:id="@+id/ebookRecsList"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@+id/ebookRecs"
+        android:layout_weight="1"></ListView>
 
     <TextView
         android:id="@+id/dbRecs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bookRecsList"
+        android:layout_below="@+id/ebookRecsList"
         android:padding="@dimen/small_font_size"
         android:text="Related databases:"
+        android:textColor="#A5803D"
         android:textSize="@dimen/extra_large_font_size" />
 
     <ListView
         android:id="@+id/dbRecsList"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dbRecs"></ListView>
+        android:layout_height="0dp"
+        android:layout_below="@+id/dbRecs"
+        android:layout_weight="1"></ListView>
 
-</RelativeLayout>
+</LinearLayout>

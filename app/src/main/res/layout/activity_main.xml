@@ -4,7 +4,7 @@
     android:id="@+id/mainLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#a5803d"
+    android:background="#fcf8e5"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -17,7 +17,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="10dp"
         android:text="You are looking for:"
-        android:textColor="#FFFFFF"
+        android:textColor="#A5803D"
         android:textSize="@dimen/large_font_size" />
 
     <RelativeLayout
@@ -40,7 +40,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="#ffffff"
+            android:textColor="#412110"
             android:textSize="@dimen/extra_large_font_size" />
 
         <TextView
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemTitle"
             android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="#ffffff"
+            android:textColor="#412110"
             android:textSize="@dimen/medium_font_size" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemCallNumber"
             android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="#ffffff"
+            android:textColor="#412110"
             android:textSize="@dimen/medium_font_size" />
 
     </RelativeLayout>
@@ -78,7 +78,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:text="Recently searched"
-            android:textColor="#ffffff"
+            android:textColor="#A5803D"
             android:textSize="@dimen/large_font_size" />
 
         <Button
@@ -89,7 +89,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:text="Popular items near me"
-            android:textColor="#ffffff"
+            android:textColor="#A5803D"
             android:textSize="@dimen/large_font_size" />
 
     </LinearLayout>
