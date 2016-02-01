@@ -17,31 +17,34 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="10dp"
         android:text="You are looking for:"
-        android:textColor="#A5803D"
+        android:textColor="@color/TextBrown"
         android:textSize="@dimen/large_font_size" />
 
     <RelativeLayout
         android:id="@+id/infoPanel"
         android:layout_width="fill_parent"
-        android:layout_height="180dp"
+        android:layout_height="100dp"
         android:layout_below="@+id/titleBanner"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:background="@drawable/info_panel"
         android:orientation="vertical">
 
 
         <ImageView
             android:id="@+id/itemThumbnail"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:paddingRight="5dp" />
 
         <TextView
             android:id="@+id/itemTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="#412110"
-            android:textSize="@dimen/extra_large_font_size" />
+            android:textColor="@color/TextBlack"
+            android:textSize="@dimen/large_font_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/itemCallNumber"
@@ -49,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemTitle"
             android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="#412110"
+            android:textColor="@color/TextBlack"
             android:textSize="@dimen/medium_font_size" />
 
         <TextView
@@ -58,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/itemCallNumber"
             android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="#412110"
+            android:textColor="@color/TextBlack"
             android:textSize="@dimen/medium_font_size" />
 
     </RelativeLayout>
@@ -68,7 +71,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/infoPanel"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.3" />
 
         <Button
             android:id="@+id/searchHistoryBtn"
@@ -77,9 +86,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:background="@drawable/button_rounded"
             android:text="Recently searched"
-            android:textColor="#A5803D"
+            android:textColor="@color/TextBrown"
             android:textSize="@dimen/large_font_size" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.1" />
 
         <Button
             android:id="@+id/itemRecsBtn"
@@ -88,9 +103,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
+            android:background="@drawable/button_rounded"
             android:text="Popular items near me"
-            android:textColor="#A5803D"
+            android:textColor="@color/TextBrown"
             android:textSize="@dimen/large_font_size" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.3" />
 
     </LinearLayout>
 

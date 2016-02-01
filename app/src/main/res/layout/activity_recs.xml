@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#fcf8e5"
+    android:background="@color/ColorPrimaryLight"
     android:orientation="vertical"
     tools:context=".RecsActivity">
 
@@ -11,50 +11,53 @@
         android:id="@+id/bookRecs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_font_size"
+        android:padding="@dimen/micro_font_size"
         android:text="Related books:"
-        android:textColor="#A5803D"
-        android:textSize="@dimen/extra_large_font_size" />
+        android:textColor="@color/TextBrown"
+        android:textSize="@dimen/large_font_size" />
 
     <ListView
         android:id="@+id/bookRecsList"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_below="@+id/bookRecs"
-        android:layout_weight="1"></ListView>
+        android:layout_weight="1"
+        android:background="@drawable/recommendation"></ListView>
 
     <TextView
         android:id="@+id/ebookRecs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bookRecsList"
-        android:padding="@dimen/small_font_size"
+        android:padding="@dimen/micro_font_size"
         android:text="Related E-books:"
-        android:textColor="#A5803D"
-        android:textSize="@dimen/extra_large_font_size" />
+        android:textColor="@color/TextBrown"
+        android:textSize="@dimen/large_font_size" />
 
     <ListView
         android:id="@+id/ebookRecsList"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_below="@+id/ebookRecs"
-        android:layout_weight="1"></ListView>
+        android:layout_weight="1"
+        android:background="@drawable/recommendation"></ListView>
 
     <TextView
         android:id="@+id/dbRecs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ebookRecsList"
-        android:padding="@dimen/small_font_size"
+        android:padding="@dimen/micro_font_size"
         android:text="Related databases:"
-        android:textColor="#A5803D"
-        android:textSize="@dimen/extra_large_font_size" />
+        android:textColor="@color/TextBrown"
+        android:textSize="@dimen/large_font_size" />
 
     <ListView
         android:id="@+id/dbRecsList"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_below="@+id/dbRecs"
-        android:layout_weight="1"></ListView>
+        android:layout_weight="1"
+        android:background="@drawable/recommendation"></ListView>
 
 </LinearLayout>
