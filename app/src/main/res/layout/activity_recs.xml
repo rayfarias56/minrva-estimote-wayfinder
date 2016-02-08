@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#a5803d"
+    android:background="@color/ColorPrimaryLight"
     android:orientation="vertical"
     tools:context=".RecsActivity">
 
@@ -11,29 +11,53 @@
         android:id="@+id/bookRecs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_font_size"
-        android:text="Related items:"
-        android:textSize="@dimen/extra_large_font_size" />
+        android:padding="@dimen/micro_font_size"
+        android:text="Related books:"
+        android:textColor="@color/TextBrown"
+        android:textSize="@dimen/large_font_size" />
 
     <ListView
         android:id="@+id/bookRecsList"
         android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@+id/bookRecs"
+        android:layout_weight="1"
+        android:background="@drawable/recommendation"></ListView>
+
+    <TextView
+        android:id="@+id/ebookRecs"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bookRecs"></ListView>
+        android:layout_below="@+id/bookRecsList"
+        android:padding="@dimen/micro_font_size"
+        android:text="Related E-books:"
+        android:textColor="@color/TextBrown"
+        android:textSize="@dimen/large_font_size" />
+
+    <ListView
+        android:id="@+id/ebookRecsList"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@+id/ebookRecs"
+        android:layout_weight="1"
+        android:background="@drawable/recommendation"></ListView>
 
     <TextView
         android:id="@+id/dbRecs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bookRecsList"
-        android:padding="@dimen/small_font_size"
+        android:layout_below="@+id/ebookRecsList"
+        android:padding="@dimen/micro_font_size"
         android:text="Related databases:"
-        android:textSize="@dimen/extra_large_font_size" />
+        android:textColor="@color/TextBrown"
+        android:textSize="@dimen/large_font_size" />
 
     <ListView
         android:id="@+id/dbRecsList"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dbRecs"></ListView>
+        android:layout_height="0dp"
+        android:layout_below="@+id/dbRecs"
+        android:layout_weight="1"
+        android:background="@drawable/recommendation"></ListView>
 
-</RelativeLayout>
+</LinearLayout>

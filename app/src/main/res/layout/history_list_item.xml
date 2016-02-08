@@ -9,15 +9,16 @@
         android:id="@+id/historyThumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5px" />
+        android:layout_margin="10px" />
 
     <TextView
         android:id="@+id/historyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/historyThumbnail"
-        android:textColor="#ff0000"
-        android:textSize="@dimen/large_font_size" />
+        android:textColor="@color/TextRed"
+        android:textSize="@dimen/large_font_size"
+        android:layout_margin="10px" />
 
     <TextView
         android:id="@+id/historyInfo"
@@ -25,8 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/historyTitle"
         android:layout_toRightOf="@+id/historyThumbnail"
-        android:textColor="#888888"
-        android:textSize="@dimen/medium_font_size" />
+        android:textColor="@color/TextGrey"
+        android:textSize="@dimen/medium_font_size"
+        android:layout_margin="10px" />
 
 </RelativeLayout>
 

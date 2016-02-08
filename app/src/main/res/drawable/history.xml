@@ -5,7 +5,7 @@
 
     <stroke
         android:width="0.01dp"
-        android:color="#AAAAAA" />
+        android:color="@color/ColorDivider" />
 
     <padding
         android:bottom="1dp"
