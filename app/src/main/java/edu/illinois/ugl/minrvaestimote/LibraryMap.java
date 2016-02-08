@@ -22,7 +22,7 @@ public class LibraryMap extends ImageView {
     // Origin with regard to the coordinates of the beacons
     // (ORIGIN * MAP_DIMS) is the location of the origin on the map in pixels
     // e.g. (0,0) is the top left corner and (1,1) is the bottom right
-    public double[] ORIGIN = {5.0, 5.0};
+    public double[] ORIGIN = {0.0, 0.0};
 
     // Real-world dimensions of the map in meters
     private static final float[] MAP_DIMS = new float[]{56.244f, 55.9f};
