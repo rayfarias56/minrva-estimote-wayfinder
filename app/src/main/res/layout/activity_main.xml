@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#fcf8e5"
+    android:background="@drawable/background_main"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.25" />
 
     <TextView
         android:id="@+id/titleBanner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
         android:text="You are looking for:"
         android:textColor="@color/TextBrown"
         android:textSize="@dimen/large_font_size" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.1" />
+
     <RelativeLayout
         android:id="@+id/infoPanel"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/titleBanner"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:background="@drawable/info_panel"
         android:orientation="vertical">
 
@@ -35,7 +43,7 @@
             android:id="@+id/itemThumbnail"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:paddingRight="5dp" />
+            android:paddingRight="3dp" />
 
         <TextView
             android:id="@+id/itemTitle"
@@ -70,14 +78,13 @@
         android:id="@+id/buttonPanel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/infoPanel"
         android:orientation="horizontal"
         android:padding="10dp">
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.1" />
 
         <Button
             android:id="@+id/searchHistoryBtn"
@@ -86,10 +93,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:background="@drawable/button_rounded"
+            android:background="@drawable/core_button"
             android:text="Recently searched"
             android:textColor="@color/TextBrown"
-            android:textSize="@dimen/large_font_size" />
+            android:textSize="@dimen/medium_font_size" />
 
         <View
             android:layout_width="0dp"
@@ -102,23 +109,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@drawable/button_rounded"
+            android:layout_weight="1.5"
+            android:background="@drawable/core_button"
             android:text="Popular items near me"
             android:textColor="@color/TextBrown"
-            android:textSize="@dimen/large_font_size" />
+            android:textSize="@dimen/medium_font_size" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.1" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonPanel"
+        android:layout_height="0dp"
+        android:layout_weight="12"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
@@ -143,4 +150,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

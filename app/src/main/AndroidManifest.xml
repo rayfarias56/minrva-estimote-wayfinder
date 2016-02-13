@@ -32,6 +32,10 @@
             android:name=".RecsActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".WebActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>
