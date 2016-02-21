@@ -1,5 +1,6 @@
 package edu.illinois.ugl.minrvaestimote;
 
+import com.estimote.sdk.SystemRequirementsChecker;
 import com.estimote.sdk.Utils;
 
 import android.app.AlertDialog;
@@ -106,6 +107,7 @@ public class MainActivity extends ActionBarActivity {
         final LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
         final BeaconDict beaconDict = new BeaconDict();
         final GridMap gridmap = new GridMap();
+        final PositionRefiner positionRefiner = new PositionRefiner();
 
         beaconManager = new BeaconManager(this);
         beaconManager.setRangingListener(new BeaconManager.RangingListener() {
@@ -131,8 +133,10 @@ public class MainActivity extends ActionBarActivity {
                             new NonLinearLeastSquaresSolver(tf, new LevenbergMarquardtOptimizer());
                     Optimum optimum = solver.solve();
                     userCoords = optimum.getPoint().toArray();
-                    if (!gridmap.isInLegalCell(userCoords[0], userCoords[1]))
+                    userCoords = positionRefiner.refinePosition(userCoords);
+                    if (!gridmap.isInLegalCell(userCoords[0], userCoords[1])) {
                         userCoords = gridmap.getClosestLegalCoords(userCoords[0], userCoords[1]);
+                    }
                 }
 
                 map.updateLocations(userCoords, beaconCoords);

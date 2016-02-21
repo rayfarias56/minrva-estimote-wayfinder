@@ -19,24 +19,21 @@ public class GridMap {
     }
 
     /**
-     * Finds the coordinates (in meters) of the nearest legal cell in the grid.
-     * @param x The user's current x position in meters.
-     * @param y The user's current y position in meters.
-     * @return The legal (x, y) coordinates in meters from the origin/the top left corner.
+     * Finds the coordinates (in centimeters) of the nearest legal cell in the grid.
+     * @param x The user's current x position in centimeters.
+     * @param y The user's current y position in centimeters.
+     * @return The legal (x, y) coordinates in centimeters from the origin/the top left corner.
      */
     public double[] getClosestLegalCoords(double x, double y) {
-        System.out.println("user is at " + x + " " + y);
         Cell curCell = convertUserCoordsToGridCell(x, y);
-        System.out.println("CurCell at " + curCell.x + " " + curCell.y);
         Cell legalCell = getClosestLegalCell(curCell);
-        System.out.println("Legal cell at " + legalCell.x + " " + legalCell.y);
         return convertCellToUserCoords(legalCell);
     }
 
     /**
      * Checks if user is currently in a legal cell in the grid.
-     * @param x The user's current x position in meters.
-     * @param y The user's current y position in meters.
+     * @param x The user's current x position in centimeters.
+     * @param y The user's current y position in centimeters.
      * @return Whether or not the user is in a legal cell.
      */
     public boolean isInLegalCell(double x, double y) {
@@ -78,31 +75,28 @@ public class GridMap {
 
     /**
      * Finds the corresponding cell in the grid based on the user's coordinates
-     * @param x The user's current x position in meters.
-     * @param y The user's current y position in meters.
+     * @param x The user's current x position in centimeters.
+     * @param y The user's current y position in centimeters.
      * @return The cell in the grid that the user is in.
      */
     private Cell convertUserCoordsToGridCell(double x, double y) {
-        double xCm = x * 100;
-        double yCm = y * 100;
         double gridXCm = LIB_X_CM / grid.length;
         double gridYCm = LIB_Y_CM / grid[0].length;
-        int cellX = (int) (xCm / gridXCm);
-        int cellY = (int) (yCm / gridYCm);
+        int cellX = (int) (x / gridXCm);
+        int cellY = (int) (y / gridYCm);
         return grid[cellX][cellY];
     }
 
     /**
-     * Finds the real coordinates (in meters) of a cell.
+     * Finds the real coordinates (in centimeters) of a cell.
      * @param cell The cell whose coordinates need to be found.
      * @return The coordinates of the cell in the library.
      */
     private double[] convertCellToUserCoords(Cell cell) {
         double gridXCm = LIB_X_CM / grid.length;
         double gridYCm = LIB_Y_CM / grid[0].length;
-        double newX = (gridXCm * cell.x) / 100;
-        double newY = (gridYCm * cell.y) / 100;
-        System.out.println("new coords: " + newX + " " + newY);
+        double newX = (gridXCm * cell.x) + (gridXCm / 2);
+        double newY = (gridYCm * cell.y) + (gridYCm / 2);
         return new double[]{newX, newY};
     }
 

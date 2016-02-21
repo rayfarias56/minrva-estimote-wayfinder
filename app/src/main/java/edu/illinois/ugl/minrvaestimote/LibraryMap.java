@@ -97,10 +97,12 @@ public class LibraryMap extends ImageView {
     }
 
     /**
-     * @param coords Coordinates from the origin in meters
+     * @param coords Coordinates from the origin in centimeters
      * @return (x,y) coordinates from the top left corner of the canvas in pixels
      */
     private float[] translateCoords(double[] coords) {
+        coords[0] = coords[0] / 100;
+        coords[1] = coords[1] / 100;
         int[] canvasDims = {this.getWidth(), this.getHeight()};
         float[] translated = new float[coords.length];
         for (int i = 0; i < coords.length; i++)
