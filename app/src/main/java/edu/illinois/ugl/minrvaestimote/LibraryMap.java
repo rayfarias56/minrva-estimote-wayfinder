@@ -82,10 +82,9 @@ public class LibraryMap extends ImageView {
 
     private void drawBeacons(Canvas canvas) {
         for (double[] beaconCoords : this.beaconsCoords) {
-            // TODO update the radius dynamically?
             float[] beaconMapCoords = translateCoords(beaconCoords);
             canvas.drawCircle(beaconMapCoords[0], beaconMapCoords[1], 25, beaconPaint);
-            canvas.drawCircle(beaconMapCoords[0], beaconMapCoords[1], 250, radiusPaint);
+            //canvas.drawCircle(beaconMapCoords[0], beaconMapCoords[1], 250, radiusPaint);
         }
     }
 
@@ -101,12 +100,13 @@ public class LibraryMap extends ImageView {
      * @return (x,y) coordinates from the top left corner of the canvas in pixels
      */
     private float[] translateCoords(double[] coords) {
-        coords[0] = coords[0] / 100;
-        coords[1] = coords[1] / 100;
+        double[] coordsInMeters = new double[2];
+        coordsInMeters[0] = coords[0] / 100;
+        coordsInMeters[1] = coords[1] / 100;
         int[] canvasDims = {this.getWidth(), this.getHeight()};
         float[] translated = new float[coords.length];
         for (int i = 0; i < coords.length; i++)
-            translated[i] = (float) (coords[i] + ORIGIN[i]) * canvasDims[i] / MAP_DIMS[i];
+            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * canvasDims[i] / MAP_DIMS[i];
 
         return translated;
     }

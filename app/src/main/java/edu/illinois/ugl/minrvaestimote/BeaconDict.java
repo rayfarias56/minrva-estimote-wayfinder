@@ -106,14 +106,14 @@ public class BeaconDict {
             Log.d("Minrva Wayfinder", "Unrecognized Minor: " + beacon.toString());
             return null;
         }
-
-        return coords;
+        return new double[]{coords[0], coords[1]};
     }
 
     public double[][] getCoords(List<Beacon> beacons) {
-        double[][] coords = new double[beacons.size()][];
-        for (int i = 0; i < beacons.size(); i++)
+        double[][] coords = new double[beacons.size()][2];
+        for (int i = 0; i < beacons.size(); i++) {
             coords[i] = getCoords(beacons.get(i));
+        }
 
         return coords;
     }
