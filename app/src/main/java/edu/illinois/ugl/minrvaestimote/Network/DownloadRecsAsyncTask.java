@@ -3,13 +3,20 @@ package edu.illinois.ugl.minrvaestimote.Network;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +31,15 @@ import java.util.Map;
 import edu.illinois.ugl.minrvaestimote.ExtendedSimpleAdapter;
 import edu.illinois.ugl.minrvaestimote.MainActivity;
 import edu.illinois.ugl.minrvaestimote.R;
+import edu.illinois.ugl.minrvaestimote.RecsActivity;
 import edu.illinois.ugl.minrvaestimote.WebActivity;
 
 /**
  * Created by yierh on 12/1/15.
  */
 public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
-    static String recApiUrl = "http://minrva-dev.library.illinois.edu/api/recommend/popularnear?shelfNums=";
+    //static String recApiUrl = "http://minrva-dev.library.illinois.edu/api/recommend/popularnear?shelfNums=";
+    static String recApiUrl = "http://minrva-dev.library.illinois.edu:8080/v8/recommend/popularnear?shelfNums=";
     private WeakReference<ListView> recBookLVRef;
     private WeakReference<ListView> recEBookLVRef;
     private WeakReference<ListView> recDatabaseLVRef;
@@ -41,6 +50,7 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
     private List<Map<String, Object>> recDatabaseList;
 
     private Map<String, Bitmap> thumbnailBitmaps;
+    private ImageSize thumbnailSize = new ImageSize(70,100);
 
     public DownloadRecsAsyncTask(ListView recBookLV, ListView recEBookLV, ListView recDatabaseLV, Context context) {
         this.recBookLVRef = new WeakReference<>(recBookLV);
@@ -69,8 +79,12 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
                 popularItem = popularItems.getJSONObject(i);
                 if (popularItem != null){
                     itemBibId = popularItem.getString("bibId");
-                    Bitmap thumbnail = imageLoader.loadImageSync(popularItem.getString("thumbnail"));
-                    thumbnailBitmaps.put(itemBibId, thumbnail);
+                    Bitmap thumbnail = imageLoader.loadImageSync(popularItem.getString("thumbnail"),thumbnailSize);
+
+                    if (thumbnail != null && thumbnail.getHeight() > 1 && thumbnail.getWidth() > 1) {
+                        thumbnailBitmaps.put(itemBibId, thumbnail);
+                    }
+
                 }
             } catch  (JSONException e) {
                 e.printStackTrace();
@@ -112,7 +126,13 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
                         map.put("recsBibId", itemBibId);
                         map.put("recsTitle", itemTitle);
                         map.put("recsAuthor", "Author: " + itemAuthor);
-                        map.put("recsThumbnail", itemThumbnail);
+
+                        if (itemThumbnail != null) {
+                            map.put("recsThumbnail", itemThumbnail);
+                        } else {
+                            map.put("recsThumbnail", R.drawable.icon_default_book);
+                        }
+
                         map.put("recsShelfNumber", "Shelf Number: " + itemShelfNumber);
 
                         recBookList.add(map);
@@ -121,13 +141,18 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
                         itemBibId = popularItem.getString("bibId");
                         itemTitle = popularItem.getString("title");
                         itemAuthor = popularItem.getString("author");
-                        //itemThumbnail = thumbnailBitmaps.get(itemBibId);
+                        itemThumbnail = thumbnailBitmaps.get(itemBibId);
 
                         Map<String, Object> map = new HashMap<>();
                         map.put("recsBibId", itemBibId);
                         map.put("recsTitle", itemTitle);
                         map.put("recsAuthor", "Author: " + itemAuthor);
-                        map.put("recsThumbnail", R.drawable.icon_default_ebook);
+
+                        if (itemThumbnail != null) {
+                            map.put("recsThumbnail", itemThumbnail);
+                        } else {
+                            map.put("recsThumbnail", R.drawable.icon_default_ebook);
+                        }
 
                         recEbookList.add(map);
 

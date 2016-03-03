@@ -13,9 +13,14 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
 
 /**
- * ExtendedSimpleAdapter which works with Bitmaps
+ * ExtendedSimpleAdapter which works with Bitmaps and Thumbnail URL
  * Modified from source: http://stackoverflow.com/questions/25386114/
  */
 
@@ -105,7 +110,11 @@ public class ExtendedSimpleAdapter extends SimpleAdapter {
                             setViewImage((ImageView) v, (Integer) data);
                         } else if (data instanceof Bitmap) {
                             setViewImage((ImageView) v, (Bitmap) data);
-                        } else {
+                        } /*else if (data instanceof String) {
+                            //customized to take in url
+                            ImageLoader imageLoader = ImageLoader.getInstance();
+                            imageLoader.displayImage((String) data, (ImageView) v);
+                        }*/ else {
                             setViewImage((ImageView) v, text);
                         }
                     } else {
