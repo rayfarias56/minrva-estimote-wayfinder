@@ -1,5 +1,8 @@
 package edu.illinois.ugl.minrvaestimote.Network;
 
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+
+import edu.illinois.ugl.minrvaestimote.LibraryMap;
 
 /**
  * Created by yierh on 12/1/15.
@@ -39,6 +44,7 @@ public class DownloadItemAsyncTask extends AsyncTask<String, Void, JSONObject> {
         String itemTitle = null;
         String itemThumbnailUrl = null;
         String itemCallNumber = null;
+
         try {
             if (libraryItem != null) {
                 itemTitle = libraryItem.getString("title");
@@ -75,8 +81,6 @@ public class DownloadItemAsyncTask extends AsyncTask<String, Void, JSONObject> {
                 itemCallNumberTV.setText("Call Number: " + itemCallNumber);
             }
         }
-
-        //TODO find out shelf number
 
     }
 

@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.illinois.ugl.minrvaestimote.Network.DownloadItemAsyncTask;
+import edu.illinois.ugl.minrvaestimote.Network.DownloadMapInfoAsyncTask;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -66,6 +68,7 @@ public class MainActivity extends ActionBarActivity {
         getItemInfo();
         getSearchHistoryReady();
         getRecsReady();
+        getMapZoomingReady();
 
         // http://developer.android.com/guide/topics/connectivity/bluetooth-le.html
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -195,7 +198,10 @@ public class MainActivity extends ActionBarActivity {
         final TextView itemTitleTV = (TextView) findViewById(R.id.itemTitle);
         final ImageView itemThumbnailIV = (ImageView) findViewById(R.id.itemThumbnail);
         final TextView itemCallNumberTV = (TextView) findViewById(R.id.itemCallNumber);
+        final TextView itemShelfNumberTV = (TextView) findViewById(R.id.itemShelfNumber);
+        final LibraryMap libraryMapView = (LibraryMap) findViewById(R.id.displayCanvas);
         new DownloadItemAsyncTask(itemTitleTV, itemThumbnailIV, itemCallNumberTV).execute(bibId);
+        new DownloadMapInfoAsyncTask(itemShelfNumberTV, libraryMapView).execute(bibId);
     }
 
     private void getSearchHistoryReady() {
@@ -279,6 +285,41 @@ public class MainActivity extends ActionBarActivity {
                     intent.putExtra("shelfNumber", shelfNumber);
                     startActivity(intent);
                 }
+            }
+        });
+    }
+
+    private void getMapZoomingReady() {
+        Button resetBtn = (Button) findViewById(R.id.zoomResetBtn);
+        Button zoomInBtn = (Button) findViewById(R.id.zoomInBtn);
+        Button zoomOutBtn = (Button) findViewById(R.id.zoomOutBtn);
+
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //reset the map to default size
+                LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
+                map.resetZoom();
+            }
+        });
+
+        zoomInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //reset the map to default size
+                LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
+                PointF currentFocus = map.getScrollPosition();
+                map.setZoom(map.getCurrentZoom() * 1.1f, currentFocus.x, currentFocus.y);
+            }
+        });
+
+        zoomOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //reset the map to default size
+                LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
+                PointF currentFocus = map.getScrollPosition();
+                map.setZoom(map.getCurrentZoom() / 1.1f, currentFocus.x, currentFocus.y);
             }
         });
     }

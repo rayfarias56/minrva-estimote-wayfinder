@@ -3,19 +3,19 @@ package edu.illinois.ugl.minrvaestimote;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Picture;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.text.style.DrawableMarginSpan;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 
 /**
  * Created by Maxx on 10/28/2015.
  */
-public class LibraryMap extends ImageView {
+public class LibraryMap extends TouchImageView {
 
     private boolean DRAW_BEACONS = true;
 
@@ -27,6 +27,9 @@ public class LibraryMap extends ImageView {
     // Real-world dimensions of the map in meters
     private static final float[] MAP_DIMS = new float[]{56.244f, 55.9f};
 
+    // Image dimensions of the map in pixels
+    private static final float[] MAP_DIMS_IMG = new float[]{550f, 550f};
+
     // TODO Don't display until trilateration performed?
     private double[] UNK_COORDS = new double[0];
     private double[] userCoords = UNK_COORDS;
@@ -34,9 +37,15 @@ public class LibraryMap extends ImageView {
     // Coordinates of the discovered beacons in meters
     private double[][] beaconsCoords = new double[0][];
 
+    // Coordinates of the item in pixels
+    private PointF itemCoords = new PointF();
+
     private Drawable[] userDots;
     private Paint beaconPaint;
     private Paint radiusPaint;
+    private Paint itemPaint;
+
+    private float[] zoomMatrix;
 
     public LibraryMap(Context context, AttributeSet attSet) {
         super(context, attSet);
@@ -62,12 +71,19 @@ public class LibraryMap extends ImageView {
         beaconPaint.setColor(Color.RED);
         radiusPaint.setStyle(Paint.Style.STROKE);
         radiusPaint.setStrokeWidth(5);
+
+        itemPaint = new Paint();
+        itemPaint.setColor(Color.BLUE);
+
+        zoomMatrix = new float[9];
     }
 
     @Override
     public void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
+
+        updateZooming(canvas);
 
         if (userCoords != UNK_COORDS) {
             float[] userMapCoords = translateCoords(this.userCoords);
@@ -78,6 +94,11 @@ public class LibraryMap extends ImageView {
 
         if (DRAW_BEACONS)
             drawBeacons(canvas);
+
+        if (itemCoords != null && (itemCoords.x != 0 || itemCoords.y != 0)) {
+            canvas.drawCircle(itemCoords.x, itemCoords.y, 15, itemPaint);
+        }
+
     }
 
     private void drawBeacons(Canvas canvas) {
@@ -118,4 +139,34 @@ public class LibraryMap extends ImageView {
         int height = userDot.getIntrinsicHeight() / 2;
         return new Rect(x-width, y-height, x+width, y+height);
     }
+
+    public void drawItem(Point itemCoords) {
+        if (userCoords != null) {
+            PointF translatedCoords = new PointF();
+            translatedCoords.x = itemCoords.x / MAP_DIMS_IMG[0] * getWidth();
+            translatedCoords.y = itemCoords.y / MAP_DIMS_IMG[1] * getHeight();
+            this.itemCoords = translatedCoords;
+        }
+        invalidate();
+    }
+
+    private void updateZooming(Canvas canvas) {
+        Matrix a = getMapMatrix();
+        a.getValues(zoomMatrix);
+
+        float transX = zoomMatrix[Matrix.MTRANS_X];
+        float transY = zoomMatrix[Matrix.MTRANS_Y];
+        canvas.translate(transX,transY);
+
+        float scaleX = zoomMatrix[Matrix.MSCALE_X];
+        float scaleY = zoomMatrix[Matrix.MSCALE_Y];
+        canvas.scale(scaleX,scaleY);
+    }
+
+    @Override
+    public Matrix getMapMatrix() {
+        return super.getMapMatrix();
+    }
+
+
 }

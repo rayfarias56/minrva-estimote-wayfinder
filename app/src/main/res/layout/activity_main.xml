@@ -134,14 +134,55 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <edu.illinois.ugl.minrvaestimote.LibraryMap
-            android:id="@+id/displayCanvas"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ugl_map"
-            android:textColor="#FFFFFF" />
+            android:layout_height="wrap_content">
+            <edu.illinois.ugl.minrvaestimote.LibraryMap
+                android:id="@+id/displayCanvas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ugl_map"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/zoomResetBtn"
+                style="@style/Base.Widget.AppCompat.ActionButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="·"
+                android:textSize="@dimen/large_font_size"
+                android:background="@drawable/core_button"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="150dp"
+                android:layout_marginRight="10dp"/>
+
+            <Button
+                android:id="@+id/zoomInBtn"
+                style="@style/Base.Widget.AppCompat.ActionButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/core_button"
+                android:text="+"
+                android:textSize="@dimen/large_font_size"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="80dp"
+                android:layout_marginRight="10dp"/>
+
+            <Button
+                android:id="@+id/zoomOutBtn"
+                style="@style/Base.Widget.AppCompat.ActionButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/core_button"
+                android:text="-"
+                android:textSize="@dimen/large_font_size"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="10dp"/>
+
+        </FrameLayout>
 
         <View
             android:layout_width="0dp"
