@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.estimote.sdk.Beacon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +18,8 @@ public class BeaconDict {
     public static final UUID MINRVA_UUID = UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d");
 
     private final HashMap<Integer, HashMap<Integer, double[]>> beaconCoords;
+    private List<double []> currentBeacons = new ArrayList<double []>();
+    private int numCalculations = 0;
 
     public BeaconDict() {
         this.beaconCoords = new HashMap<Integer, HashMap<Integer, double[]>>();
@@ -92,7 +95,7 @@ public class BeaconDict {
     public double[] getCoords(Beacon beacon) {
         if (!beacon.getProximityUUID().equals(MINRVA_UUID)) {
             Log.d("Minrva Wayfinder", "Non-Minrva beacon: " + beacon.toString());
-            return null;
+            return null; // This should never happen since Ranging feature only uses our UUID
         }
 
         HashMap<Integer, double[]> minorMap = this.beaconCoords.get(beacon.getMajor());
@@ -109,12 +112,23 @@ public class BeaconDict {
         return new double[]{coords[0], coords[1]};
     }
 
-    public double[][] getCoords(List<Beacon> beacons) {
-        double[][] coords = new double[beacons.size()][2];
-        for (int i = 0; i < beacons.size(); i++) {
-            coords[i] = getCoords(beacons.get(i));
+    public List<Beacon> removeInvalidBeacons(List<Beacon> beacons)
+    {
+        currentBeacons = new ArrayList<double []>();
+        List<Beacon> validBeacons = new ArrayList<Beacon>();
+        for (int i = 0; i < beacons.size(); i++)
+        {
+            double[] coords = getCoords(beacons.get(i));
+            if (coords != null) {
+                validBeacons.add(beacons.get(i));
+                currentBeacons.add(coords);
+            }
         }
+        return validBeacons;
+    }
 
+    public double[][] getCoords() {
+        double[][] coords = currentBeacons.toArray(new double[currentBeacons.size()][]);
         return coords;
     }
 }

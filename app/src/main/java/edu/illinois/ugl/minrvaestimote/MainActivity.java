@@ -118,29 +118,32 @@ public class MainActivity extends ActionBarActivity {
                     Log.d("Minrva Wayfinder", "Beacon " + i + ": " + list.get(i).toString());
                 }
 
-                double[][] beaconCoords = beaconDict.getCoords(list);
+                list = beaconDict.removeInvalidBeacons(list); // must call this before getCoords
+                double[][] beaconCoords = beaconDict.getCoords();
                 double[] userCoords = null;
 
-                if (list.size() >= 3) {
+                if (list.size() >= 2) {
 
                     double[] distances = new double[list.size()];
                     for (int i = 0; i < list.size(); i++)
                         distances[i] = Utils.computeAccuracy(list.get(i));
-
                     // TODO new TF can throw exceptions, maybe try to catch them
                     TrilaterationFunction tf = new TrilaterationFunction(beaconCoords, distances);
                     NonLinearLeastSquaresSolver solver =
                             new NonLinearLeastSquaresSolver(tf, new LevenbergMarquardtOptimizer());
                     Optimum optimum = solver.solve();
                     userCoords = optimum.getPoint().toArray();
-                    userCoords = positionRefiner.refinePosition(userCoords);
+                    // userCoords = positionRefiner.refinePosition(userCoords);
                     if (!gridmap.isInLegalCell(userCoords[0], userCoords[1])) {
                         userCoords = gridmap.getClosestLegalCoords(userCoords[0], userCoords[1]);
                     }
+
+                }
+                else if (list.size() == 1) {
+                    userCoords = beaconCoords[0];
                 }
 
                 map.updateLocations(userCoords, beaconCoords);
-
             }
         });
 
