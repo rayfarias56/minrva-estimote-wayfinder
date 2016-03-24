@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 public class LibraryMap extends TouchImageView {
 
     private boolean DRAW_BEACONS = true;
+    private boolean DRAW_RANDOM_USER_COORDS = false;
 
     // Origin with regard to the coordinates of the beacons
     // (ORIGIN * MAP_DIMS) is the location of the origin on the map in pixels
@@ -87,7 +88,7 @@ public class LibraryMap extends TouchImageView {
 
         if (userCoords != UNK_COORDS) {
             float[] userMapCoords = translateCoords(this.userCoords);
-            Drawable userDot = userDots[0];
+            Drawable userDot = userDots[6];
             userDot.setBounds(getDotBounds(userDot, userMapCoords));
             userDot.draw(canvas);
         }
@@ -112,6 +113,8 @@ public class LibraryMap extends TouchImageView {
     public void updateLocations(double[] userCoords, double[][] beaconsCoords) {
         if (userCoords != null)
             this.userCoords = userCoords;
+        if (DRAW_RANDOM_USER_COORDS)
+            this.userCoords = new double[]{Math.random() * 5624, Math.random() * 4985};
         this.beaconsCoords = beaconsCoords;
         invalidate();
     }
