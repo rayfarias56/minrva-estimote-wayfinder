@@ -5,11 +5,16 @@ import com.estimote.sdk.Utils;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PointF;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,11 +40,25 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.apache.commons.math3.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.apache.commons.math3.fitting.leastsquares.LevenbergMarquardtOptimizer;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import edu.illinois.ugl.minrvaestimote.Network.DownloadItemAsyncTask;
 import edu.illinois.ugl.minrvaestimote.Network.DownloadMapInfoAsyncTask;
@@ -49,10 +68,20 @@ public class MainActivity extends ActionBarActivity {
     private BeaconManager beaconManager;
     private Region region;
     private String bibId;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // allow for HTTP request to happen in main thread
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        context = getApplicationContext();
+        //new HttpAsyncTask().execute("https://minrva-wayfinder.herokuapp.com/rest/v1.0/beacons");
+        GET("https://minrva-wayfinder.herokuapp.com/rest/v1.0/beacons");
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -325,5 +354,106 @@ public class MainActivity extends ActionBarActivity {
                 map.setZoom(map.getCurrentZoom() / 1.1f, currentFocus.x, currentFocus.y);
             }
         });
+    }
+
+    //TODO have separate methods for each GET request
+    public static void GET(String url){
+        InputStream response = null;
+        String jsonString = "";
+        try {
+
+            trustAllHosts();
+            HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
+            urlConnection.setHostnameVerifier(DO_NOT_VERIFY);
+            response = urlConnection.getInputStream();
+
+            // convert HTTP response to a String
+            jsonString = IOUtils.toString(response, "UTF-8");
+
+            if(jsonString == null) {
+                return;
+            }
+
+            JSONArray jsonBeacons = new JSONArray(jsonString);
+            BeaconDbHelper dbHelper = new BeaconDbHelper(context);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            dbHelper.onUpgrade(db, 0, 1); //TODO save version number to be able to skip this part
+            String currUuid;
+            int currMajor;
+            int currMinor;
+            double currX;
+            double currY;
+            double currZ;
+            String currDesc;
+
+            for (int i = 0; i < jsonBeacons.length(); i++) {
+                JSONObject currBeacon = jsonBeacons.getJSONObject(i);
+                currUuid = currBeacon.getString("uuid");
+                currMajor = currBeacon.getInt("major");
+                currMinor = currBeacon.getInt("minor");
+                currX = currBeacon.getDouble("x");
+                currY = currBeacon.getDouble("y");
+                currZ = currBeacon.getDouble("z");
+                currDesc = currBeacon.getString("description");
+
+                // add to database
+                dbHelper.insert(db, currUuid, currMajor, currMinor, currX, currY, currZ, currDesc);
+            }
+            Cursor result = db.rawQuery("SELECT * FROM beacons", null);
+            result.moveToFirst();
+            Log.d("Num entries", result.getCount() + "");
+            result.close();
+
+        } catch (Exception e) {
+            Toast.makeText(context, "Server connection failed. Try again later.", Toast.LENGTH_SHORT).show();
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+    }
+
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String[] urls) {
+            GET(urls[0]);
+            return urls[0];
+        }
+    }
+
+    /**
+     * Always verify the host and don't check the certificate
+     */
+    final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    };
+
+    /**
+     * Trust every server - don't check for any certificate
+     */
+    private static void trustAllHosts() {
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return new java.security.cert.X509Certificate[] {};
+            }
+
+            public void checkClientTrusted(X509Certificate[] chain,
+                                           String authType) throws CertificateException {
+            }
+
+            public void checkServerTrusted(X509Certificate[] chain,
+                                           String authType) throws CertificateException {
+            }
+        } };
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection
+                    .setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

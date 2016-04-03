@@ -1,5 +1,6 @@
 package edu.illinois.ugl.minrvaestimote;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.estimote.sdk.Beacon;
@@ -23,7 +24,17 @@ public class BeaconDict {
 
     public BeaconDict() {
         this.beaconCoords = new HashMap<Integer, HashMap<Integer, double[]>>();
+
+        BeaconDbHelper dbHelper = new BeaconDbHelper(MainActivity.context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        BeaconObject[] dbBeacons = dbHelper.getBeacons(db);
+
+        for (BeaconObject beacon : dbBeacons) {
+            addBeacon(beacon.getMajor(), beacon.getMinor(), new double[]{beacon.getX(), beacon.getY()});
+        }
+
         // Temporarily hard-code the coordinates for testing
+        /*
         addBeacon(30361, 13334, new double[]{2813.04, 4674.28});
 
         addBeacon(47997, 21952, new double[]{312.46, 4051.04});
@@ -83,8 +94,9 @@ public class BeaconDict {
         addBeacon(58691, 24320, new double[]{4063.28, 311.6});
         addBeacon(30816, 41832, new double[]{4688.4, 311.6});
         addBeacon(22900, 32356, new double[]{5313.52, 311.6});
+        */
     }
-
+    //TODO Make sure that z coordinates are also used
     private void addBeacon(int major, int minor, double[] coords) {
         if (!this.beaconCoords.containsKey(major))
             this.beaconCoords.put(major, new HashMap<Integer, double[]>());

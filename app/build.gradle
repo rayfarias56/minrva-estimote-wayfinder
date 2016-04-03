@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+    }
 }
 
 dependencies {
@@ -26,4 +31,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.estimote:sdk:0.9.4@aar'
     compile 'com.android.support:design:23.1.0'
+    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }
