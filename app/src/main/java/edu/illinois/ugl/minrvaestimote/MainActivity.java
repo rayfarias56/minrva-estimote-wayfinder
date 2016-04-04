@@ -309,13 +309,15 @@ public class MainActivity extends ActionBarActivity {
         recsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO get the shelf number near user
-                String shelfNumber = "15";
+                final LibraryMap map = (LibraryMap) findViewById(R.id.displayCanvas);
+                float[] userCoords = map.getUserCoordsInPixel();
 
-                if ( !shelfNumber.equals("") ) {
+                if ( userCoords != null ) {
                     Intent intent = new Intent(getApplicationContext(), RecsActivity.class);
-                    intent.putExtra("shelfNumber", shelfNumber);
+                    intent.putExtra("userCoords", userCoords);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Cannot fetch user coordinates.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

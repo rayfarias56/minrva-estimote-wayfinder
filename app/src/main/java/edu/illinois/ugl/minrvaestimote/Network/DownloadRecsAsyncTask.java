@@ -3,6 +3,7 @@ package edu.illinois.ugl.minrvaestimote.Network;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -37,9 +38,11 @@ import edu.illinois.ugl.minrvaestimote.WebActivity;
 /**
  * Created by yierh on 12/1/15.
  */
-public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
+public class DownloadRecsAsyncTask extends AsyncTask<Void, Void, JSONArray> {
     //static String recApiUrl = "http://minrva-dev.library.illinois.edu/api/recommend/popularnear?shelfNums=";
-    static String recApiUrl = "http://minrva-dev.library.illinois.edu:8080/v8/recommend/popularnear?shelfNums=";
+    //static String recApiUrl = "http://minrva-dev.library.illinois.edu:8080/v8/recommend/popularnear?shelfNums=";
+    static String recApiUrl = "http://minrva-dev.library.illinois.edu/api/recommend/popularnear?"; //x=50&y=500
+    static String mapApiUrl = "http://minrva-dev.library.illinois.edu:8080/api/wayfinder/map_data/uiu_undergrad/";
     private WeakReference<ListView> recBookLVRef;
     private WeakReference<ListView> recEBookLVRef;
     private WeakReference<ListView> recDatabaseLVRef;
@@ -52,7 +55,11 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
     private Map<String, Bitmap> thumbnailBitmaps;
     private ImageSize thumbnailSize = new ImageSize(70,100);
 
-    public DownloadRecsAsyncTask(ListView recBookLV, ListView recEBookLV, ListView recDatabaseLV, Context context) {
+    private Map<String, Integer> itemShelfNumbers;
+
+    private float[] userCoords;
+
+    public DownloadRecsAsyncTask(float[] userCoords, ListView recBookLV, ListView recEBookLV, ListView recDatabaseLV, Context context) {
         this.recBookLVRef = new WeakReference<>(recBookLV);
         this.recEBookLVRef = new WeakReference<>(recEBookLV);
         this.recDatabaseLVRef = new WeakReference<>(recDatabaseLV);
@@ -63,12 +70,16 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
         recDatabaseList = new ArrayList<>();
 
         thumbnailBitmaps = new HashMap<>();
+        itemShelfNumbers = new HashMap<>();
+
+        this.userCoords = userCoords;
     }
 
     @Override
-    protected JSONArray doInBackground(String... shelfNumber) {
+    protected JSONArray doInBackground(Void... params) {
+        Log.i("RecActivity", userCoords.length+"");
         UrlDownloader urlDownloader = new UrlDownloader();
-        String url = recApiUrl + shelfNumber[0];
+        String url = recApiUrl + "x=" + userCoords[0] + "&y=" + userCoords[1];
         JSONArray popularItems = urlDownloader.getArray(url);
 
         JSONObject popularItem;
@@ -79,7 +90,14 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
                 popularItem = popularItems.getJSONObject(i);
                 if (popularItem != null){
                     itemBibId = popularItem.getString("bibId");
-                    Bitmap thumbnail = imageLoader.loadImageSync(popularItem.getString("thumbnail"),thumbnailSize);
+                    Bitmap thumbnail = imageLoader.loadImageSync(popularItem.getString("thumbnail"), thumbnailSize);
+
+                    if (popularItem.has("format") && popularItem.getString("format").equals("Book")) {
+                        Integer shelfNumber = downloadShelfNumber(itemBibId);
+                        if (shelfNumber != null && shelfNumber > 0) {
+                            itemShelfNumbers.put(itemBibId, shelfNumber);
+                        }
+                    }
 
                     if (thumbnail != null && thumbnail.getHeight() > 1 && thumbnail.getWidth() > 1) {
                         thumbnailBitmaps.put(itemBibId, thumbnail);
@@ -92,6 +110,26 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
         }
 
         return popularItems;
+    }
+
+    private Integer downloadShelfNumber(String bibId) {
+        UrlDownloader urlDownloader = new UrlDownloader();
+        JSONObject itemMapInfo = urlDownloader.getObject(mapApiUrl + bibId);
+
+        try {
+            //Example returned object by map_data api
+            //{"call_num":"D810.W7 W43 1990","map_name":"1_undergrad.png",
+            // "x":"459","y":"339","shelf_number":"7","author":"Weatherford, Doris. ",
+            // "title":"American women and World War II "}
+            if (itemMapInfo != null && itemMapInfo.has("shelf_number")) {
+                String itemShelfNumber = itemMapInfo.getString("shelf_number");
+                return Integer.valueOf(itemShelfNumber);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
@@ -119,7 +157,7 @@ public class DownloadRecsAsyncTask extends AsyncTask<String, Void, JSONArray> {
                         itemBibId = popularItem.getString("bibId");
                         itemTitle = popularItem.getString("title");
                         itemAuthor = popularItem.getString("author");
-                        itemShelfNumber = "000";
+                        itemShelfNumber = itemShelfNumbers.get(itemBibId).toString();
                         itemThumbnail = thumbnailBitmaps.get(itemBibId);
 
                         Map<String, Object> map = new HashMap<>();

@@ -172,4 +172,14 @@ public class LibraryMap extends TouchImageView {
     }
 
 
+    /**
+     * @return (x,y) coordinates of the user from the top left corner of the canvas in pixels
+     */
+    public float[] getUserCoordsInPixel() {
+        if (this.userCoords != UNK_COORDS) {
+            return translateCoords(this.userCoords);
+        } else {
+            return null;
+        }
+    }
 }

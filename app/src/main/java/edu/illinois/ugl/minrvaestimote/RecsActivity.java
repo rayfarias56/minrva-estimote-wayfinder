@@ -5,12 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import edu.illinois.ugl.minrvaestimote.Network.DownloadRecsAsyncTask;
 
 public class RecsActivity extends AppCompatActivity {
 
-    private String shelfNumber;
+    private float[] userCoords; //user coordinates in pixel
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,12 +19,12 @@ public class RecsActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                shelfNumber = null;
+                userCoords = null;
             } else {
-                shelfNumber = extras.getString("shelfNumber");
+                userCoords = extras.getFloatArray("userCoords");
             }
         } else {
-            shelfNumber = (String) savedInstanceState.getSerializable("shelfNumber");
+            userCoords = (float[]) savedInstanceState.getSerializable("userCoords");
         }
         setContentView(R.layout.activity_recs);
 
@@ -31,7 +32,13 @@ public class RecsActivity extends AppCompatActivity {
         final ListView bookListView = (ListView) this.findViewById(R.id.bookRecsList);
         final ListView ebookListView = (ListView) this.findViewById(R.id.ebookRecsList);
         final ListView dbListView = (ListView) this.findViewById(R.id.dbRecsList);
-        new DownloadRecsAsyncTask(bookListView, ebookListView, dbListView, this).execute(shelfNumber);
+
+        if (userCoords != null && userCoords.length == 2){
+            new DownloadRecsAsyncTask(userCoords, bookListView, ebookListView, dbListView, this).execute();
+        } else {
+            Toast.makeText(this, "Cannot fetch user coordinates.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
