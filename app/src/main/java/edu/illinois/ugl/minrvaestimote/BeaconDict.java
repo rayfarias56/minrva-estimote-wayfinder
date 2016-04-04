@@ -30,14 +30,14 @@ public class BeaconDict {
         BeaconObject[] dbBeacons = dbHelper.getBeacons(db);
 
         for (BeaconObject beacon : dbBeacons) {
-            addBeacon(beacon.getMajor(), beacon.getMinor(), new double[]{beacon.getX(), beacon.getY()});
+            addBeacon(beacon.getMajor(), beacon.getMinor(), new double[]{625.12 * beacon.getY() - 312.56, 4674.28 - 623.24 * beacon.getX()});
         }
 
         // Temporarily hard-code the coordinates for testing
         /*
         addBeacon(30361, 13334, new double[]{2813.04, 4674.28});
 
-        addBeacon(47997, 21952, new double[]{312.46, 4051.04});
+        addBeacon(47997, 21952, new double[]{312.56, 4051.04});
         addBeacon(60183, 20478, new double[]{937.68, 4051.04});
         addBeacon(7639, 41966, new double[]{1562.8, 4051.04});
         addBeacon(13796, 61719, new double[]{2187.92, 4051.04});
