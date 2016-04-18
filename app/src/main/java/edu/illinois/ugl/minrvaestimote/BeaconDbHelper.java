@@ -32,6 +32,12 @@ public class BeaconDbHelper extends SQLiteOpenHelper {
 
     public BeaconDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '" + BeaconEntry.TABLE_NAME + "'", null);
+        if (cursor.getCount() < 1) {
+            db.execSQL(SQL_CREATE_ENTRIES);
+        }
+        cursor.close();
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -89,7 +95,7 @@ public class BeaconDbHelper extends SQLiteOpenHelper {
 
     /* Inner class that defines the table contents */
     public static abstract class BeaconEntry implements BaseColumns {
-        public static final String TABLE_NAME   = "beacons";
+        public static final String TABLE_NAME   = "Beacons";
         public static final String COLUMN_UUID  = "uuid";
         public static final String COLUMN_MAJOR = "major";
         public static final String COLUMN_MINOR = "minor";

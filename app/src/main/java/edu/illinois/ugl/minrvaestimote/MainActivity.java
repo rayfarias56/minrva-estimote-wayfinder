@@ -79,8 +79,13 @@ public class MainActivity extends ActionBarActivity {
         StrictMode.setThreadPolicy(policy);
 
         context = getApplicationContext();
-        //new HttpAsyncTask().execute("https://minrva-wayfinder.herokuapp.com/rest/v1.0/beacons");
-        GET("https://minrva-wayfinder.herokuapp.com/rest/v1.0/beacons");
+
+        // get current version from server and update beacons if out of date
+        int currVersion = getVersion("https://minrva-wayfinder.herokuapp.com/rest/v1.0/version");
+        VersionDbHelper dbHelper= new VersionDbHelper(MainActivity.context);
+        if (dbHelper.checkVersion(currVersion) == false) {
+            downloadBeacons("https://minrva-wayfinder.herokuapp.com/rest/v1.0/beacons");
+        }
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -363,8 +368,7 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    //TODO have separate methods for each GET request
-    public static void GET(String url){
+    public static void downloadBeacons(String url){
         InputStream response = null;
         String jsonString = "";
         try {
@@ -384,7 +388,7 @@ public class MainActivity extends ActionBarActivity {
             JSONArray jsonBeacons = new JSONArray(jsonString);
             BeaconDbHelper dbHelper = new BeaconDbHelper(context);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            dbHelper.onUpgrade(db, 0, 1); //TODO save version number to be able to skip this part
+            //dbHelper.onUpgrade(db, 0, 1); //TODO save version number to be able to skip this part
             String currUuid;
             int currMajor;
             int currMinor;
@@ -417,14 +421,32 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String[] urls) {
-            GET(urls[0]);
-            return urls[0];
-        }
-    }
+    public static int getVersion(String url) {
+        InputStream response = null;
+        String jsonString = "";
+        try {
 
+            trustAllHosts();
+            HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
+            urlConnection.setHostnameVerifier(DO_NOT_VERIFY);
+            response = urlConnection.getInputStream();
+
+            // convert HTTP response to a String
+            jsonString = IOUtils.toString(response, "UTF-8");
+
+            if(jsonString == null) {
+                return 0;
+            }
+
+            JSONObject jsonVersion = new JSONObject(jsonString);
+            return jsonVersion.getInt("id");
+
+        } catch (Exception e) {
+            Toast.makeText(context, "Server connection failed. Try again later.", Toast.LENGTH_SHORT).show();
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+        return 0;
+    }
     /**
      * Always verify the host and don't check the certificate
      */
