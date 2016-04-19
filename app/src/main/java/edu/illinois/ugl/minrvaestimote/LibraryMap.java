@@ -26,7 +26,7 @@ public class LibraryMap extends TouchImageView {
     public double[] ORIGIN = {0.0, 0.0};
 
     // Real-world dimensions of the map in meters
-    private static final float[] MAP_DIMS = new float[]{56.244f, 55.9f};
+    private static final float[] MAP_DIMS = new float[]{56.717f, 57.143f};
 
     // Image dimensions of the map in pixels
     private static final float[] MAP_DIMS_IMG = new float[]{550f, 550f};
@@ -114,7 +114,7 @@ public class LibraryMap extends TouchImageView {
         if (userCoords != null)
             this.userCoords = userCoords;
         if (DRAW_RANDOM_USER_COORDS)
-            this.userCoords = new double[]{Math.random() * 5624, Math.random() * 4985};
+            this.userCoords = new double[]{Math.random() * 5671, Math.random() * 5084};
         this.beaconsCoords = beaconsCoords;
         invalidate();
     }

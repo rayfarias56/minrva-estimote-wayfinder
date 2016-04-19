@@ -169,15 +169,20 @@ public class MainActivity extends ActionBarActivity {
                     distances = positionRefiner.metabeaconsToDistances(closeList);
                     beaconCoords = positionRefiner.metabeaconsToCoords(closeList);
 
-                    // TODO new TF can throw exceptions, maybe try to catch them
-                    TrilaterationFunction tf = new TrilaterationFunction(beaconCoords, distances);
-                    NonLinearLeastSquaresSolver solver =
-                            new NonLinearLeastSquaresSolver(tf, new LevenbergMarquardtOptimizer());
-                    Optimum optimum = solver.solve();
-                    userCoords = optimum.getPoint().toArray();
-                    userCoords = positionRefiner.refinePosition(userCoords);
-                    if (!gridmap.isInLegalCell(userCoords[0], userCoords[1])) {
-                        userCoords = gridmap.getClosestLegalCoords(userCoords[0], userCoords[1]);
+                    try {
+                        TrilaterationFunction tf = new TrilaterationFunction(beaconCoords, distances);
+                        NonLinearLeastSquaresSolver solver =
+                                new NonLinearLeastSquaresSolver(tf, new LevenbergMarquardtOptimizer());
+                        Optimum optimum = solver.solve();
+                        userCoords = optimum.getPoint().toArray();
+                        userCoords = positionRefiner.refinePosition(userCoords);
+                        if (!gridmap.isInLegalCell(userCoords[0], userCoords[1])) {
+                            userCoords = gridmap.getClosestLegalCoords(userCoords[0], userCoords[1]);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.e("Minrva Wayfinder", e.getMessage());
                     }
 
                 }

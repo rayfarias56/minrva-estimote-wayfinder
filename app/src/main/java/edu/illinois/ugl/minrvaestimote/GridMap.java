@@ -11,8 +11,8 @@ public class GridMap {
     private Cell[][] grid;
 
     // The dimensions of the library floor in centimeters, based on the UGL CAD map.
-    private double LIB_X_CM = 5624.40;
-    private double LIB_Y_CM = 4985.90;
+    private double LIB_X_CM = 5671.718;
+    private double LIB_Y_CM = 5083.904;
 
     public GridMap() {
         createGrid();
