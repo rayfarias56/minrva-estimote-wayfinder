@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 
 /**
@@ -99,7 +100,7 @@ public class LibraryMap extends TouchImageView {
         if (itemCoords != null && (itemCoords.x != 0 || itemCoords.y != 0)) {
             canvas.drawCircle(itemCoords.x, itemCoords.y, 15, itemPaint);
         }
-
+        
     }
 
     private void drawBeacons(Canvas canvas) {
@@ -130,17 +131,8 @@ public class LibraryMap extends TouchImageView {
         int[] canvasDims = {this.getWidth(), this.getHeight()};
         float[] translated = new float[coords.length];
 
-        /*for (int i = 0; i < coords.length; i++)
-            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * canvasDims[i] / MAP_DIMS[i];*/
-
-        //temporary workaround
-        //issue: paintCircle() treat the canvas as size max(width,height) * max(width,height)
-        //       rather than width*height
-        int maxCanvasDim = 0;
         for (int i = 0; i < coords.length; i++)
-            maxCanvasDim = Math.max(maxCanvasDim, canvasDims[i]);
-        for (int i = 0; i < coords.length; i++)
-            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * maxCanvasDim / MAP_DIMS[i];
+            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * canvasDims[i] / MAP_DIMS[i];
 
         return translated;
     }
@@ -157,15 +149,8 @@ public class LibraryMap extends TouchImageView {
         if (rawItemCoords != null) {
             PointF translatedCoords = new PointF();
 
-            /*translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * getWidth();
-            translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * getHeight(); */
-
-            //temporary workaround
-            //issue: paintCircle() treat the canvas as size max(width,height) * max(width,height)
-            //       rather than width*height
-            int canvasDim = Math.max(getWidth(), getHeight());
-            translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * canvasDim;
-            translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * canvasDim;
+            translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * getWidth();
+            translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * getHeight();
 
             this.itemCoords = translatedCoords;
         }
