@@ -95,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
                 bibId = extras.getString("bibId");
             }
         } else {
-            bibId = (String) savedInstanceState.getSerializable("bibId");
+            bibId = savedInstanceState.getString("bibId");
         }
         setContentView(R.layout.activity_main);
 
@@ -234,6 +234,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("bibId",bibId);
     }
 
     private void getItemInfo() {

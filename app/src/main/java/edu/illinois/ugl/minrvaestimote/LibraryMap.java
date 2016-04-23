@@ -129,8 +129,18 @@ public class LibraryMap extends TouchImageView {
         coordsInMeters[1] = coords[1] / 100;
         int[] canvasDims = {this.getWidth(), this.getHeight()};
         float[] translated = new float[coords.length];
+
+        /*for (int i = 0; i < coords.length; i++)
+            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * canvasDims[i] / MAP_DIMS[i];*/
+
+        //temporary workaround
+        //issue: paintCircle() treat the canvas as size max(width,height) * max(width,height)
+        //       rather than width*height
+        int maxCanvasDim = 0;
         for (int i = 0; i < coords.length; i++)
-            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * canvasDims[i] / MAP_DIMS[i];
+            maxCanvasDim = Math.max(maxCanvasDim, canvasDims[i]);
+        for (int i = 0; i < coords.length; i++)
+            translated[i] = (float) (coordsInMeters[i] + ORIGIN[i]) * maxCanvasDim / MAP_DIMS[i];
 
         return translated;
     }
@@ -143,11 +153,20 @@ public class LibraryMap extends TouchImageView {
         return new Rect(x-width, y-height, x+width, y+height);
     }
 
-    public void drawItem(Point itemCoords) {
-        if (userCoords != null) {
+    public void updateItemCoords(Point rawItemCoords) {
+        if (rawItemCoords != null) {
             PointF translatedCoords = new PointF();
-            translatedCoords.x = itemCoords.x / MAP_DIMS_IMG[0] * getWidth();
-            translatedCoords.y = itemCoords.y / MAP_DIMS_IMG[1] * getHeight();
+
+            /*translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * getWidth();
+            translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * getHeight(); */
+
+            //temporary workaround
+            //issue: paintCircle() treat the canvas as size max(width,height) * max(width,height)
+            //       rather than width*height
+            int canvasDim = Math.max(getWidth(), getHeight());
+            translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * canvasDim;
+            translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * canvasDim;
+
             this.itemCoords = translatedCoords;
         }
         invalidate();

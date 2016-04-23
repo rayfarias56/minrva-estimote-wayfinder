@@ -32,12 +32,11 @@
         android:id="@+id/infoPanel"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_weight="3"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:background="@drawable/info_panel"
         android:orientation="vertical">
-
 
         <ImageView
             android:id="@+id/itemThumbnail"
@@ -45,33 +44,41 @@
             android:layout_height="fill_parent"
             android:paddingRight="3dp" />
 
-        <TextView
-            android:id="@+id/itemTitle"
-            android:layout_width="fill_parent"
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="@color/TextBlack"
-            android:textSize="@dimen/large_font_size"
-            android:textStyle="bold" />
+            android:layout_toRightOf="@+id/itemThumbnail">
 
-        <TextView
-            android:id="@+id/itemCallNumber"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/itemTitle"
-            android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="@color/TextBlack"
-            android:textSize="@dimen/medium_font_size" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/itemShelfNumber"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/itemCallNumber"
-            android:layout_toRightOf="@+id/itemThumbnail"
-            android:textColor="@color/TextBlack"
-            android:textSize="@dimen/medium_font_size" />
+                <TextView
+                    android:id="@+id/itemTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/TextBlack"
+                    android:textSize="@dimen/large_font_size"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/itemCallNumber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/itemTitle"
+                    android:textColor="@color/TextBlack"
+                    android:textSize="@dimen/medium_font_size" />
+
+                <TextView
+                    android:id="@+id/itemShelfNumber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/itemCallNumber"
+                    android:textColor="@color/TextBlack"
+                    android:textSize="@dimen/medium_font_size" />
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <LinearLayout
@@ -96,7 +103,7 @@
             android:background="@drawable/core_button"
             android:text="Recently searched"
             android:textColor="@color/TextBrown"
-            android:textSize="@dimen/medium_font_size" />
+            android:textSize="@dimen/small_font_size" />
 
         <View
             android:layout_width="0dp"
@@ -113,7 +120,7 @@
             android:background="@drawable/core_button"
             android:text="Popular items near me"
             android:textColor="@color/TextBrown"
-            android:textSize="@dimen/medium_font_size" />
+            android:textSize="@dimen/small_font_size" />
 
         <View
             android:layout_width="0dp"
@@ -125,8 +132,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="12"
         android:layout_marginBottom="10dp"
+        android:layout_weight="12"
         android:orientation="horizontal">
 
         <View
@@ -135,12 +142,13 @@
             android:layout_weight="1" />
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
             <edu.illinois.ugl.minrvaestimote.LibraryMap
                 android:id="@+id/displayCanvas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ugl_map"
@@ -151,36 +159,36 @@
                 style="@style/Base.Widget.AppCompat.ActionButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="·"
-                android:textSize="@dimen/large_font_size"
-                android:background="@drawable/core_button"
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="150dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:background="@drawable/core_button"
+                android:text="·"
+                android:textSize="@dimen/large_font_size" />
 
             <Button
                 android:id="@+id/zoomInBtn"
                 style="@style/Base.Widget.AppCompat.ActionButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/core_button"
-                android:text="+"
-                android:textSize="@dimen/large_font_size"
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="80dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:background="@drawable/core_button"
+                android:text="+"
+                android:textSize="@dimen/large_font_size" />
 
             <Button
                 android:id="@+id/zoomOutBtn"
                 style="@style/Base.Widget.AppCompat.ActionButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/core_button"
-                android:text="-"
-                android:textSize="@dimen/large_font_size"
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="30dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:background="@drawable/core_button"
+                android:text="-"
+                android:textSize="@dimen/large_font_size" />
 
         </FrameLayout>
 

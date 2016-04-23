@@ -66,7 +66,7 @@ public class DownloadMapInfoAsyncTask extends AsyncTask<String, Void, JSONObject
         LibraryMap libraryMapView = libraryMapRef.get();
         if (libraryMapView != null) {
             if (itemCoordinate != null) {
-                libraryMapView.drawItem(itemCoordinate);
+                libraryMapView.updateItemCoords(itemCoordinate);
             }
 
 
