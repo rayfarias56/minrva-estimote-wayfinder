@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 
@@ -48,6 +49,7 @@ public class LibraryMap extends TouchImageView {
     private Paint itemPaint;
 
     private float[] zoomMatrix;
+    private float screenDensity;
 
     public LibraryMap(Context context, AttributeSet attSet) {
         super(context, attSet);
@@ -78,6 +80,9 @@ public class LibraryMap extends TouchImageView {
         itemPaint.setColor(Color.BLUE);
 
         zoomMatrix = new float[9];
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        screenDensity = metrics.density;
     }
 
     @Override
@@ -128,7 +133,8 @@ public class LibraryMap extends TouchImageView {
         double[] coordsInMeters = new double[2];
         coordsInMeters[0] = coords[0] / 100;
         coordsInMeters[1] = coords[1] / 100;
-        int[] canvasDims = {this.getWidth(), this.getHeight()};
+        //int[] canvasDims = {this.getWidth(), this.getHeight()};
+        float[] canvasDims = {MAP_DIMS_IMG[0] * screenDensity, MAP_DIMS_IMG[1] * screenDensity};
         float[] translated = new float[coords.length];
 
         for (int i = 0; i < coords.length; i++)
@@ -149,8 +155,11 @@ public class LibraryMap extends TouchImageView {
         if (rawItemCoords != null) {
             PointF translatedCoords = new PointF();
 
-            translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * getWidth();
-            translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * getHeight();
+            //translatedCoords.x = rawItemCoords.x / MAP_DIMS_IMG[0] * getWidth();
+            //translatedCoords.y = rawItemCoords.y / MAP_DIMS_IMG[1] * getHeight();
+
+            translatedCoords.x = rawItemCoords.x * screenDensity;
+            translatedCoords.y = rawItemCoords.y * screenDensity;
 
             this.itemCoords = translatedCoords;
         }
@@ -163,11 +172,11 @@ public class LibraryMap extends TouchImageView {
 
         float transX = zoomMatrix[Matrix.MTRANS_X];
         float transY = zoomMatrix[Matrix.MTRANS_Y];
-        canvas.translate(transX,transY);
+        canvas.translate(transX, transY);
 
         float scaleX = zoomMatrix[Matrix.MSCALE_X];
         float scaleY = zoomMatrix[Matrix.MSCALE_Y];
-        canvas.scale(scaleX,scaleY);
+        canvas.scale(scaleX, scaleY);
     }
 
     @Override
