@@ -78,6 +78,7 @@ public class MainActivity extends ActionBarActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        // save context for use by the databases
         context = getApplicationContext();
 
         // get current version from server and update beacons if out of date
@@ -379,11 +380,16 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Downloads the beacons from a REST interface at a given URL
+     * @param url The URL of the REST interface for the beacons
+     */
     public static void downloadBeacons(String url){
         InputStream response = null;
         String jsonString = "";
         try {
 
+            // makes an HTTPS connection and ignores the certificate
             trustAllHosts();
             HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
             urlConnection.setHostnameVerifier(DO_NOT_VERIFY);
@@ -399,7 +405,7 @@ public class MainActivity extends ActionBarActivity {
             JSONArray jsonBeacons = new JSONArray(jsonString);
             BeaconDbHelper dbHelper = new BeaconDbHelper(context);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            //dbHelper.onUpgrade(db, 0, 1); //TODO save version number to be able to skip this part
+
             String currUuid;
             int currMajor;
             int currMinor;
@@ -408,6 +414,7 @@ public class MainActivity extends ActionBarActivity {
             double currZ;
             String currDesc;
 
+            // insert each beacon into the database
             for (int i = 0; i < jsonBeacons.length(); i++) {
                 JSONObject currBeacon = jsonBeacons.getJSONObject(i);
                 currUuid = currBeacon.getString("uuid");
@@ -421,10 +428,6 @@ public class MainActivity extends ActionBarActivity {
                 // add to database
                 dbHelper.insert(db, currUuid, currMajor, currMinor, currX, currY, currZ, currDesc);
             }
-            Cursor result = db.rawQuery("SELECT * FROM beacons", null);
-            result.moveToFirst();
-            Log.d("Num entries", result.getCount() + "");
-            result.close();
 
         } catch (Exception e) {
             Toast.makeText(context, "Server connection failed. Try again later.", Toast.LENGTH_SHORT).show();
@@ -432,11 +435,16 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Gets the current version number of the beacon database.
+     * @param url The URL of the REST interface for the version number
+     * @return The version number. If a server error occurs, 0 is returned.
+     */
     public static int getVersion(String url) {
         InputStream response = null;
         String jsonString = "";
         try {
-
+            // makes an HTTPS connection and ignores the certificate
             trustAllHosts();
             HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
             urlConnection.setHostnameVerifier(DO_NOT_VERIFY);
@@ -468,7 +476,8 @@ public class MainActivity extends ActionBarActivity {
     };
 
     /**
-     * Trust every server - don't check for any certificate
+     * Trust every server - don't check for any certificate. This may need to be changed when
+     * integrated into the official Minrva modules.
      */
     private static void trustAllHosts() {
         // Create a trust manager that does not validate certificate chains

@@ -7,13 +7,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import java.sql.SQLClientInfoException;
-
+/**
+ * Helper class that handles common functions for the local beacon database.
+ */
 public class BeaconDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "beacons.db";
 
+    // SQL for creating the table
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + BeaconEntry.TABLE_NAME + " (" +
                     BeaconEntry._ID + "  INTEGER," +
@@ -27,23 +29,32 @@ public class BeaconDbHelper extends SQLiteOpenHelper {
                     "PRIMARY KEY (" + BeaconEntry.COLUMN_UUID + ", " + BeaconEntry.COLUMN_MAJOR + ", " + BeaconEntry.COLUMN_MINOR +
                     " ))";
 
+    // SQL for deleting the table
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + BeaconEntry.TABLE_NAME;
 
+    /**
+     * Constructor for a BeaconDbHelper
+     * @param context The context from the MainActivity
+     */
     public BeaconDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '" + BeaconEntry.TABLE_NAME + "'", null);
-        if (cursor.getCount() < 1) {
-            db.execSQL(SQL_CREATE_ENTRIES);
-        }
-        cursor.close();
     }
 
+    /**
+     * Creates the table in the given database
+     * @param db The database that should contain the beacons table
+     */
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
     }
 
+    /**
+     * Deletes the beacons table and recreates it.
+     * @param db The database that contains the beacons table
+     * @param oldVersion Not used, but required for overriding.
+     * @param newVersion Not used, but required for overriding.
+     */
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
@@ -51,10 +62,27 @@ public class BeaconDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Deletes the beacons table and recreates it.
+     * @param db The database that contains the beacons table
+     * @param oldVersion Not used, but required for overriding.
+     * @param newVersion Not used, but required for overriding.
+     */
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    /**
+     * Inserts the information of a beacon into the beacons table
+     * @param db The database that contains the beacons table
+     * @param uuid The UUID of the beacon to be added
+     * @param major The major number of the beacon to be added
+     * @param minor The minor number of the beacon to be added
+     * @param x The X coordinate of the beacon to be added
+     * @param y The Y coordinate of the beacon to be added
+     * @param z The Z coordinate of the beacon to be added
+     * @param desc The description of the beacon to be added
+     */
     public void insert(SQLiteDatabase db, String uuid, int major, int minor, double x, double y, double z, String desc) {
         db.execSQL(
                 "INSERT INTO " + BeaconEntry.TABLE_NAME + " (uuid, major, minor, x, y, z, description) " +
@@ -62,6 +90,11 @@ public class BeaconDbHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Retrieves all beacons from the local database as an array of BeaconObjects
+     * @param db The database that contains the beacons table
+     * @return A BeaconObject[] containing all beacons from the local database
+     */
     public BeaconObject[] getBeacons(SQLiteDatabase db) {
 
         Cursor result = db.rawQuery("SELECT * FROM " + BeaconEntry.TABLE_NAME, null);
@@ -86,7 +119,6 @@ public class BeaconDbHelper extends SQLiteOpenHelper {
             String desc = result.getString(desc_col);
 
             beacons[i] = new BeaconObject(uuid, major, minor, x, y, z, desc);
-            Log.d("Beacon", beacons[i].toString());
             result.moveToNext();
         }
         result.close();
