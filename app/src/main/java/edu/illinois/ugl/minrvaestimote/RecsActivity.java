@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import edu.illinois.ugl.minrvaestimote.Network.DownloadRecsAsyncTask;
 
+/**
+ * Activity for displaying item recommendations
+ */
 public class RecsActivity extends AppCompatActivity {
 
     private float[] userCoords; //user coordinates in pixel

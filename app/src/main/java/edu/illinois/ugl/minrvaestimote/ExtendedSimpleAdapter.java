@@ -13,17 +13,10 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
-
 /**
  * ExtendedSimpleAdapter which works with Bitmaps and Thumbnail URL
  * Modified from source: http://stackoverflow.com/questions/25386114/
  */
-
 
 public class ExtendedSimpleAdapter extends SimpleAdapter {
     List<Map<String, Object>> map;

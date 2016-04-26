@@ -1,8 +1,5 @@
 package edu.illinois.ugl.minrvaestimote.Network;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,10 +12,8 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 
-import edu.illinois.ugl.minrvaestimote.LibraryMap;
-
 /**
- * Created by yierh on 12/1/15.
+ * Download item's information and update front-end asynchronously
  */
 public class DownloadItemAsyncTask extends AsyncTask<String, Void, JSONObject> {
     static String displayApiUrl = "http://minrva-dev.library.illinois.edu:8080/api/display/";

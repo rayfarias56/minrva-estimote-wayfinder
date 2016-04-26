@@ -243,6 +243,9 @@ public class MainActivity extends ActionBarActivity {
         savedInstanceState.putString("bibId",bibId);
     }
 
+    /**
+     * Download item info by calling minrva api and update the UI
+     */
     private void getItemInfo() {
         // set imageLoader config here
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(getApplicationContext());
@@ -258,6 +261,9 @@ public class MainActivity extends ActionBarActivity {
         new DownloadMapInfoAsyncTask(itemShelfNumberTV, libraryMapView).execute(bibId);
     }
 
+    /**
+     * Initialize the search history button
+     */
     private void getSearchHistoryReady() {
         Button searchHistoryBtn = (Button) findViewById(R.id.searchHistoryBtn);
 
@@ -269,6 +275,9 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Helper function for loading data into the search history popup window
+     */
     private void initHistoryPopWindow() {
         View contentView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.history_list_popup, null);
         PopupWindow popupWindow = new PopupWindow(findViewById(R.id.mainLayout), ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -300,6 +309,10 @@ public class MainActivity extends ActionBarActivity {
         popupWindow.showAtLocation(findViewById(R.id.mainLayout), Gravity.CENTER, 0, 0);
     }
 
+    /**
+     * Helper function for retrieving search history
+     * @return a list of items and their information
+     */
     private List<Map<String, Object>> getHistoryData() {
         //TODO implement cache and load search history
         List<Map<String, Object>> historyList = new ArrayList<>();
@@ -325,6 +338,9 @@ public class MainActivity extends ActionBarActivity {
         return historyList;
     }
 
+    /**
+     * Initialize the item recommendation button
+     */
     private void getRecsReady() {
         Button recsBtn = (Button) findViewById(R.id.itemRecsBtn);
 
@@ -345,6 +361,9 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Initialize the zooming buttons on the map
+     */
     private void getMapZoomingReady() {
         Button resetBtn = (Button) findViewById(R.id.zoomResetBtn);
         Button zoomInBtn = (Button) findViewById(R.id.zoomInBtn);

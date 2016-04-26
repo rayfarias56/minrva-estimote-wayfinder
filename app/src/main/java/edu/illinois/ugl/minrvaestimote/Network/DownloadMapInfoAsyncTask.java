@@ -1,15 +1,9 @@
 package edu.illinois.ugl.minrvaestimote.Network;
 
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.AsyncTask;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,7 +12,7 @@ import java.lang.ref.WeakReference;
 import edu.illinois.ugl.minrvaestimote.LibraryMap;
 
 /**
- * Created by yierh on 3/5/16.
+ * Download item's coordinates and shelf number and update front-end asynchronously
  */
 public class DownloadMapInfoAsyncTask extends AsyncTask<String, Void, JSONObject> {
     static String mapApiUrl = "http://minrva-dev.library.illinois.edu:8080/api/wayfinder/map_data/uiu_undergrad/";

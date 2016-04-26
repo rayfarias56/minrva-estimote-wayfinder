@@ -11,7 +11,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 
 /**
@@ -151,6 +150,10 @@ public class LibraryMap extends TouchImageView {
         return new Rect(x-width, y-height, x+width, y+height);
     }
 
+    /**
+     * Translate raw item coords to coords on map image
+     * @param rawItemCoords Coordinates of the item returned by api call
+     */
     public void updateItemCoords(Point rawItemCoords) {
         if (rawItemCoords != null) {
             PointF translatedCoords = new PointF();
@@ -166,6 +169,10 @@ public class LibraryMap extends TouchImageView {
         invalidate();
     }
 
+    /**
+     * Update the zoom matrix of the canvas according to the map
+     * @param canvas the canvas to draw circles/user dots on
+     */
     private void updateZooming(Canvas canvas) {
         Matrix a = getMapMatrix();
         a.getValues(zoomMatrix);

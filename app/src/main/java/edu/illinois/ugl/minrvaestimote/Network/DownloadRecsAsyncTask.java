@@ -3,21 +3,14 @@ package edu.illinois.ugl.minrvaestimote.Network;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,11 +25,10 @@ import java.util.Map;
 import edu.illinois.ugl.minrvaestimote.ExtendedSimpleAdapter;
 import edu.illinois.ugl.minrvaestimote.MainActivity;
 import edu.illinois.ugl.minrvaestimote.R;
-import edu.illinois.ugl.minrvaestimote.RecsActivity;
 import edu.illinois.ugl.minrvaestimote.WebActivity;
 
 /**
- * Created by yierh on 12/1/15.
+ * Download item recommendations and update front-end asynchronously
  */
 public class DownloadRecsAsyncTask extends AsyncTask<Void, Void, JSONArray> {
     //static String recApiUrl = "http://minrva-dev.library.illinois.edu/api/recommend/popularnear?shelfNums=";
@@ -77,11 +69,12 @@ public class DownloadRecsAsyncTask extends AsyncTask<Void, Void, JSONArray> {
 
     @Override
     protected JSONArray doInBackground(Void... params) {
-        Log.i("RecActivity", userCoords.length+"");
+        //Download recommendations
         UrlDownloader urlDownloader = new UrlDownloader();
         String url = recApiUrl + "x=" + userCoords[0] + "&y=" + userCoords[1];
         JSONArray popularItems = urlDownloader.getArray(url);
 
+        //Download available thumbnails
         JSONObject popularItem;
         String itemBibId;
         ImageLoader imageLoader = ImageLoader.getInstance();
@@ -112,6 +105,11 @@ public class DownloadRecsAsyncTask extends AsyncTask<Void, Void, JSONArray> {
         return popularItems;
     }
 
+    /**
+     * Helper function for downloading the shelf number of an item
+     * @param bibId the bibId of the item
+     * @return item's shelf number
+     */
     private Integer downloadShelfNumber(String bibId) {
         UrlDownloader urlDownloader = new UrlDownloader();
         JSONObject itemMapInfo = urlDownloader.getObject(mapApiUrl + bibId);
@@ -147,6 +145,7 @@ public class DownloadRecsAsyncTask extends AsyncTask<Void, Void, JSONArray> {
             return;
         }
 
+        // Sort into three categories: books, e-books, databases
         for (int i = 0; i < popularItems.length(); i++) {
             try {
                 popularItem = popularItems.getJSONObject(i);
@@ -220,7 +219,7 @@ public class DownloadRecsAsyncTask extends AsyncTask<Void, Void, JSONArray> {
             }
         }
 
-        //load contents into the lists
+        //load contents into the lists and display on front-end
         ListView bookListView = recBookLVRef.get();
         ExtendedSimpleAdapter bookAdapter = new ExtendedSimpleAdapter(displayContext, recBookList, R.layout.recs_list_item_book,
                 new String[]{"recsTitle", "recsAuthor", "recsThumbnail", "recsShelfNumber"},
