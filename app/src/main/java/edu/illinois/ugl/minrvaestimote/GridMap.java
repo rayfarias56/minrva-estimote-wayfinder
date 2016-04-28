@@ -10,7 +10,7 @@ public class GridMap {
 
     private Cell[][] grid;
 
-    // The dimensions of the library floor in centimeters, based on the UGL CAD map.
+    // The dimensions of the library floor in centimeters, based on Benjamin's CAD map calculations.
     private double LIB_X_CM = 5671.718;
     private double LIB_Y_CM = 5083.904;
 
@@ -52,7 +52,7 @@ public class GridMap {
             for(int j = 0; j < numCellsY; j++)
                 grid[i][j] = new Cell(i, j, true);
 
-        // Right now only marking grids that were marked on CAD map.
+        // Right now only marking cells that were marked on CAD map.
         markIllegalCells(1, 14, 0, 1);
         markIllegalCells(0, 0, 3, 1);
         markIllegalCells(6, 0, 5, 1);
@@ -101,7 +101,7 @@ public class GridMap {
     }
 
     /**
-     * From the cell the user is in, finds the nearest legal cell.
+     * From the cell the user is in, uses breadth-first search to find the nearest legal cell.
      * @param startCell The cell that the user is in
      * @return The nearest legal cell in the grid or null if there are none.
      */
@@ -136,7 +136,7 @@ public class GridMap {
     }
 
     /**
-     * Private class that is used to represent a cell in the libary's grid.
+     * Private class that is used to represent a cell in the library's grid.
      */
     private class Cell {
         public int x;

@@ -15,13 +15,15 @@ import java.util.UUID;
  */
 public class BeaconDict {
 
-    // TODO Set all library beacons to a specific UUID and change this
+    // TODO Set all library beacons to a non-default UUID and change this
     public static final UUID MINRVA_UUID = UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d");
 
     private final HashMap<Integer, HashMap<Integer, double[]>> beaconCoords;
     private List<double []> currentBeacons = new ArrayList<double []>();
-    private int numCalculations = 0;
 
+    /**
+     * Initializes our beacon dictionary by pulling beacon information from the database.
+     */
     public BeaconDict() {
         this.beaconCoords = new HashMap<Integer, HashMap<Integer, double[]>>();
 
@@ -95,7 +97,7 @@ public class BeaconDict {
         addBeacon(58691, 24320, new double[]{4096.240777777777, 317.7440000000006});
         addBeacon(30816, 41832, new double[]{4726.431666666666, 317.7440000000006});
         addBeacon(22900, 32356, new double[]{5356.622555555555, 317.7440000000006});
-        /*
+        /* // Old beacon coordinates before Benjamin recalculated the library dimensions.
         addBeacon(30361, 13334, new double[]{2813.04, 4674.28});
 
         addBeacon(47997, 21952, new double[]{312.56, 4051.04});
@@ -157,7 +159,14 @@ public class BeaconDict {
         addBeacon(22900, 32356, new double[]{5313.52, 311.6});
         */
     }
+
     //TODO Make sure that z coordinates are also used
+    /**
+     * Takes information for a beacon and puts it in our dictionary.
+     * @param major The beacon's major value.
+     * @param minor The beacon's minor value.
+     * @param coords The beacon's coordinates in centimeters.
+     */
     private void addBeacon(int major, int minor, double[] coords) {
         if (!this.beaconCoords.containsKey(major))
             this.beaconCoords.put(major, new HashMap<Integer, double[]>());
@@ -165,6 +174,11 @@ public class BeaconDict {
         this.beaconCoords.get(major).put(minor, coords);
     }
 
+    /**
+     * If the input beacon is ours, returns its coordintes. Else returns null.
+     * @param beacon The beacon we want the coordinates of.
+     * @return The coordinates if found, or null if not found.
+     */
     public double[] getCoords(Beacon beacon) {
         if (!beacon.getProximityUUID().equals(MINRVA_UUID)) {
             Log.d("Minrva Wayfinder", "Non-Minrva beacon: " + beacon.toString());
@@ -185,6 +199,11 @@ public class BeaconDict {
         return new double[]{coords[0], coords[1]};
     }
 
+    /**
+     * Removes beacons that have the same UUID as ours but are not part of this project.
+     * @param beacons The detected beacons.
+     * @return The beacons that belong to us.
+     */
     public List<Beacon> removeInvalidBeacons(List<Beacon> beacons)
     {
         currentBeacons = new ArrayList<double []>();
@@ -200,6 +219,10 @@ public class BeaconDict {
         return validBeacons;
     }
 
+    /**
+     * Converts our list of valid beacons to an array of coordinates to be used in trilateration.
+     * @return An array of the current valid beacon coordinates.
+     */
     public double[][] getCoords() {
         double[][] coords = currentBeacons.toArray(new double[currentBeacons.size()][]);
         return coords;

@@ -1,8 +1,5 @@
 package edu.illinois.ugl.minrvaestimote;
 
-
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +16,11 @@ public class PositionRefiner {
         started = false;
     }
 
+    /**
+     * Adjusts the user's position if it changed too much from the previous position.
+     * @param userCoords The user's library coordinates in cm from trilateration.
+     * @return The user coords after being adjusted if necessary.
+     */
     public double[] refinePosition(double[] userCoords) {
         if (!started) {
             prevTime = System.currentTimeMillis();
@@ -30,22 +32,18 @@ public class PositionRefiner {
         long curTime = System.currentTimeMillis();
         long elapsedTime = curTime - prevTime;
         if (elapsedTime == 0) elapsedTime++; // Just to prevent crashes from dividing by zero
-        System.out.println("elapsedTime is " + elapsedTime);
 
         double x = userCoords[0] - prevCoords[0];
         double y = userCoords[1] - prevCoords[1];
         double distanceTraveled = Math.abs(x) + Math.abs(y); // Use Manhattan distance for now
-        System.out.println("Distance is " + distanceTraveled + ", x " + x + ", y " + y);
 
-        // Now check if user could have actually traveled that distance in that time
-        // Average walking speed according to Wikipedia is 1.4 m/s or 0.14 cm/ms
-        // So we will use 2.0 as our cutoff for now
+        // Now check if user could have actually traveled that distance in that time.
+        // Average walking speed according to Wikipedia is 1.4 m/s or 0.14 cm/ms.
+        // We will use a higher threshold to be safe.
         double purportedSpeed = distanceTraveled / elapsedTime;
-        System.out.println("speed " + purportedSpeed);
-        System.out.println("prevCoords " + prevCoords[0] + " " + prevCoords[1]);
         double[] newCoords = new double[2];
         if (purportedSpeed <= 0.30) {
-            // It is possible the user walked here fast enough, so the coords are valid
+            // It is possible the user walked here fast enough, so the coords are valid.
             newCoords = userCoords;
         } else {
             // It is unlikely the user walked here fast enough, so only move them a little bit.
@@ -57,10 +55,15 @@ public class PositionRefiner {
 
         prevTime = curTime;
         prevCoords = newCoords;
-        System.out.println("newCoords " + newCoords[0] + " " + newCoords[1]);
         return newCoords;
     }
 
+    /**
+     * Finds at most the 3 closest beacons to improve trilateration accuracy.
+     * @param distances The distances between the user and beacons.
+     * @param coords The coordinates of the beacons.
+     * @return The three (or fewer) closest beacons to the user.
+     */
     public List getThreeClosestBeacons(double[] distances, double[][] coords)
     {
         List<Metabeacon> list = new ArrayList<Metabeacon>();
@@ -73,20 +76,30 @@ public class PositionRefiner {
         return list;
     }
 
+    /**
+     * Converts the list of Metabeacons to an array of their distances.
+     * @param list A list of Metabeacons.
+     * @return An array of the distances corresponding to the input Metabeacons.
+     */
     public double[] metabeaconsToDistances(List<Metabeacon> list)
     {
-        int num = Math.min(3, list.size());
-        double[] distances = new double[num];
-        for (int i = 0; i < num; i++)
+        int max = Math.min(3, list.size());
+        double[] distances = new double[max];
+        for (int i = 0; i < max; i++)
             distances[i] = list.get(i).distance;
         return distances;
     }
 
+    /**
+     * Converts the list of Metabeacons to an array of their coordinates.
+     * @param list A list of Metabeacons.
+     * @return An array of the coordinates corresponding to the input Metabeacons.
+     */
     public double[][] metabeaconsToCoords(List<Metabeacon> list)
     {
-        int num = Math.min(3, list.size());
-        double[][] coords = new double[num][2];
-        for (int i = 0; i < num; i++)
+        int max = Math.min(3, list.size());
+        double[][] coords = new double[max][2];
+        for (int i = 0; i < max; i++)
         {
             coords[i][0] = list.get(i).x;
             coords[i][1] = list.get(i).y;
@@ -94,6 +107,9 @@ public class PositionRefiner {
         return coords;
     }
 
+    /**
+     * Simple class used to sort beacons to find closest ones.
+     */
     private class Metabeacon implements Comparable<Metabeacon>
     {
         public double distance;
